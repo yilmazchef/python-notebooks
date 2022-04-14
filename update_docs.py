@@ -33,7 +33,7 @@ def to_py(ipynb_file):
             for line in cell['source']:
                 print("#", line, end='')
             print('\n')
-    print(f"\"{ipynb_file}\" to {py_file} conversion complete...")
+    print(f"\"{ipynb_file}\" to \"{py_file}\" conversion complete...")
 
 
 def to_md(ipynb_file, md_file):
@@ -62,7 +62,8 @@ def to_odt(md_file, odt_file):
 
 if __name__ == "__main__":
 
-    ipynb_file_list = list_files(os.getcwd(), ".ipynb")
+    src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    ipynb_file_list = list_files(src_path, ".ipynb")
 
     for ipynb_file in ipynb_file_list:
         md_file = ipynb_file.replace(".ipynb", ".md")
