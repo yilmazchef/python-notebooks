@@ -1,5 +1,6 @@
 import os
 import sys
+import pathlib
 from uuid import uuid4
 import json
 
@@ -7,7 +8,7 @@ def path_to_dict(root_path):
     for root, dirs, files in os.walk(root_path, topdown=True):
         tree = {
             "id": str(uuid4()),
-            "name": root,
+            "name": os.path.basename(root),
             "icon": "folder",
             "type": "folder",
             "children": []
@@ -16,12 +17,12 @@ def path_to_dict(root_path):
         tree["children"].extend(
             [path_to_dict(os.path.join(root, d)) for d in dirs]
         )
-
+        
         tree["children"].extend(
             [{
                 "id": str(uuid4()),
-                "name": os.path.join(root, f),
-                "icon": ".py",
+                "name": os.path.basename(os.path.join(root, f)),
+                "icon": pathlib.Path(os.path.join(root, f)).suffix,
                 "link": "some_link_here",
                 "type": "file"
             } for f in files]
