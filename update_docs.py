@@ -60,22 +60,23 @@ def to_odt(md_file, odt_file):
     print(f"\"{md_file}\" to \"{odt_file}\" conversion complete...")
 
 
-ipynb_file_list = list_files(os.getcwd(), ".ipynb")
+if __name__ == "__main__":
 
-for ipynb_file in ipynb_file_list:
-    md_file = ipynb_file.replace(".ipynb", ".md")
-    # docx_file = ipynb_file.replace(".ipynb", ".docx")
-    # odt_file = ipynb_file.replace(".ipynb", ".odt")
+    ipynb_file_list = list_files(os.getcwd(), ".ipynb")
+
+    for ipynb_file in ipynb_file_list:
+        md_file = ipynb_file.replace(".ipynb", ".md")
+        # docx_file = ipynb_file.replace(".ipynb", ".docx")
+        # odt_file = ipynb_file.replace(".ipynb", ".odt")
+
+        print("#" * 255)
+
+        to_md(ipynb_file, md_file)
+        # to_docx(md_file, docx_file)
+
+        print("#" * 255)
 
     print("#" * 255)
-
-    to_md(ipynb_file, md_file)
-    # to_docx(md_file, docx_file)
-
-    print("#" * 255)
-
-
-print("#" * 255)
-print("#" * 80, end="")
-print("THE CONVERSION IS COMPLETED..", end="")
-print("#" * 80, end="\n")
+    print("#" * 80, end="")
+    print("THE CONVERSION IS COMPLETED..", end="")
+    print("#" * 80, end="\n")
