@@ -3,27 +3,47 @@ import sys
 import pathlib
 from uuid import uuid4
 import json
+import fnmatch
+import re
 
 def path_to_dict(root_path):
+    
+    includes = ['*.md', '*.ipynb'] # for files only
+    excludes = ['.vscode', '.git', 'Books', 'Code', 'Presentations'] # for dirs and files
+
+    # transform glob patterns to regular expressions
+    includes = r'|'.join([fnmatch.translate(x) for x in includes])
+    excludes = r'|'.join([fnmatch.translate(x) for x in excludes]) or r'$.'
+    
     for root, dirs, files in os.walk(root_path, topdown=True):
+        
+          # exclude dirs
+        dirs[:] = [os.path.join(root, d) for d in dirs]
+        dirs[:] = [d for d in dirs if not re.match(excludes, d)]
+
+        # exclude/include files
+        files = [os.path.join(root, f) for f in files]
+        files = [f for f in files if not re.match(excludes, f)]
+        files = [f for f in files if re.match(includes, f)]
+        
         tree = {
-            "id": str(uuid4()),
             "name": os.path.basename(root),
+            "test": str(uuid4()),
             "icon": "folder",
             "type": "folder",
-            "children": []
+            "child": []
         }
 
-        tree["children"].extend(
+        tree["child"].extend(
             [path_to_dict(os.path.join(root, d)) for d in dirs]
         )
         
-        tree["children"].extend(
+        tree["child"].extend(
             [{
-                "id": str(uuid4()),
                 "name": os.path.basename(os.path.join(root, f)),
+                "test": str(uuid4()),
                 "icon": pathlib.Path(os.path.join(root, f)).suffix,
-                "link": "some_link_here",
+                "link": os.path.join(root, f),
                 "type": "file"
             } for f in files]
         )
@@ -45,70 +65,3 @@ def notebook_file_paths(folder_path, file_type):
 
     return paths
 
-
-def mock():
-    return [
-        {
-            "name": 'Python',
-            "test": 'parent1',
-            "icon": "filename.py",
-            "child": [
-                {
-                    "name": 'Module1',
-                    "test": 'py_child1',
-                    "child": [
-                        {
-                            "name": 'leaf',
-                            "test": 'py_childofpy_child1',
-                            "link": "linkgelecekburaya",
-                        }
-                    ],
-                },
-                {
-                    "name": 'Module 2',
-                    "test": 'py_child2',
-                    "child": [
-                        {
-                            "test": 'py_childofpy_child2',
-                            "name": 'asdasd',
-                            "link": "linkgelecekburaya",
-                        },
-                    ],
-                },
-                {
-                    "name": 'Module 3',
-                    "test": 'py_child3',
-                    "child": [
-                        {
-                            "test": 'py_childofpy_child3',
-                            "name": 'asdasd',
-                            "link": "linkgelecekburaya",
-                        },
-                    ],
-                },
-                {
-                    "name": 'Module 4',
-                    "test": 'py_child4',
-                    "child": [
-                        {
-                            "test": 'py_childofpy_child4',
-                            "name": 'asdasd',
-                            "link": "linkgelecekburaya",
-                        },
-                    ],
-                },
-                {
-                    "name": 'Module 5',
-                    "test": 'py_child5',
-                    "child": [
-                        {
-                            "test": 'py_childofpy_child5',
-                            "name": 'asdasd',
-                            "link": "linkgelecekburaya",
-                        },
-                    ],
-                },
-
-            ],
-        },
-    ]
