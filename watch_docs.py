@@ -3,7 +3,7 @@ import sys
 import time
 import watchdog.events
 import watchdog.observers
-from update_docs import to_md, to_docx
+from update_docs import to_md, to_docx, to_odt, to_py
 
 
 class Handler(watchdog.events.PatternMatchingEventHandler):
@@ -13,35 +13,33 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
                                                              ignore_directories=True, case_sensitive=False)
 
     def on_created(self, event):
-        print("Watchdog received created event - % s." % event.src_path)
+        print("#" * 255)
+        print(f"{event.src_path} is created.")
         # Event is created, you can process it now
+        print("#" * 255)
 
     def on_modified(self, event):
-        print("Watchdog received modified event - % s." % event.src_path)
+        print("#" * 255)
+        print(f"{event.src_path} is modified.")
         # Event is modified, you can process it now
         md_file = event.src_path.replace(".ipynb", ".md")
         docx_file = event.src_path.replace(".ipynb", ".docx")
-        print("#" * 255)
         to_md(event.src_path, md_file)
+        print(f"{md_file} is modified.")
         to_docx(md_file, docx_file)
+        print(f"{docx_file} is modified.")
         print("#" * 255)
-        print("#" * 255)
-        print("#" * 80, end="")
-        print("THE CONVERSION IS COMPLETED..", end="")
-        print("#" * 80, end="\n")
 
     def on_deleted(self, event):
-        print("Watchdog received delete event - % s." % event.src_path)
+        print("#" * 255)
+        print(f"{event.src_path} is deleted.")
         md_file = event.src_path.replace(".ipynb", ".md")
         docx_file = event.src_path.replace(".ipynb", ".docx")
-        print("#" * 255)
         os.remove(md_file)
+        print(f"{md_file} is deleted.")
         os.remove(docx_file)
+        print(f"{docx_file} is deleted.")
         print("#" * 255)
-        print("#" * 255)
-        print("#" * 80, end="")
-        print("THE NOTEBOOK, ITS RELATED MARKDOWN FILE AND WORD DOCUMENT ARE DELETED..", end="")
-        print("#" * 80, end="\n")
 
 
 if __name__ == "__main__":

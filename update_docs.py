@@ -4,24 +4,16 @@
 import os
 import sys
 import json
-
-
-def list_files(filepath, filetype):
-    paths = []
-    for root, dirs, files in os.walk(filepath):
-        for file in files:
-            if file.lower().endswith(filetype.lower()):
-                paths.append(os.path.join(root, file))
-
-    print(paths)
-
-    return(paths)
+import time
+import uuid
 
 
 def to_py(ipynb_file):
     py_file = ipynb_file.replace(".ipynb", ".py")
+
     print(f"\"{ipynb_file}\" to \"{py_file}\" conversion started...")
     code = json.load(open(ipynb_file))
+
     for cell in code['cells']:
         if cell['cell_type'] == 'code':
             print('# -------- code --------')
@@ -60,10 +52,22 @@ def to_odt(md_file, odt_file):
     print(f"\"{md_file}\" to \"{odt_file}\" conversion complete...")
 
 
+def to_json(md_file, json_file):
+    pass
+
+
+def to_pdf(md_file, pdf_file):
+    print(f"{md_file} to \"{pdf_file}\" conversion started...")
+    cmdlet = f"pandoc -t odt \"{md_file}\" -o \"{pdf_file}\""
+    print(cmdlet)
+    os.system(cmdlet)
+    print(f"\"{md_file}\" to \"{pdf_file}\" conversion complete...")
+
+
 if __name__ == "__main__":
 
     src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    ipynb_file_list = list_files(src_path, ".ipynb")
+    ipynb_file_list = notebook_file_paths(src_path, ".ipynb")
 
     for ipynb_file in ipynb_file_list:
         md_file = ipynb_file.replace(".ipynb", ".md")
