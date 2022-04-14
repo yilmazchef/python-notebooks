@@ -1,0 +1,217 @@
+<center>
+    <img src='https://intecbrussel.be/img/logo3.png' width='400px' height='auto'/>
+    <br/>
+    <em>Python course materials</em>
+</center>
+
+# Functions and Methods Homework 
+
+Complete the following questions:
+____
+**Write a function that computes the volume of a sphere given its radius.**
+<p>The volume of a sphere is given as $$\frac{4}{3} πr^3$$</p>
+
+
+```python
+def vol(rad):
+    pass
+```
+
+
+```python
+# Check
+vol(2)
+```
+
+
+
+
+    33.49333333333333
+
+
+
+___
+**Write a function that checks whether a number is in a given range (inclusive of high and low)**
+
+
+```python
+def ran_check(num,low,high):
+    pass
+```
+
+
+```python
+# Check
+ran_check(5,2,7)
+```
+
+    5 is in the range between 2 and 7
+    
+
+If you only wanted to return a boolean:
+
+
+```python
+def ran_bool(num,low,high):
+    pass
+```
+
+
+```python
+ran_bool(3,1,10)
+```
+
+
+
+
+    True
+
+
+
+____
+**Write a Python function that accepts a string and calculates the number of upper case letters and lower case letters.**
+
+    Sample String : 'Hello Mr. Rogers, how are you this fine Tuesday?'
+    Expected Output : 
+    No. of Upper case characters : 4
+    No. of Lower case Characters : 33
+
+HINT: Two string methods that might prove useful: **.isupper()** and **.islower()**
+
+If you feel ambitious, explore the Collections module to solve this problem!
+
+
+```python
+def up_low(s):
+    pass
+```
+
+
+```python
+s = 'Hello Mr. Rogers, how are you this fine Tuesday?'
+up_low(s)
+```
+
+    Original String :  Hello Mr. Rogers, how are you this fine Tuesday?
+    No. of Upper case characters :  4
+    No. of Lower case Characters :  33
+    
+
+____
+**Write a Python function that takes a list and returns a new list with unique elements of the first list.**
+
+    Sample List : [1,1,1,1,2,2,3,3,3,3,4,5]
+    Unique List : [1, 2, 3, 4, 5]
+
+
+```python
+def unique_list(lst):
+    pass
+```
+
+
+```python
+unique_list([1,1,1,1,2,2,3,3,3,3,4,5])
+```
+
+
+
+
+    [1, 2, 3, 4, 5]
+
+
+
+____
+**Write a Python function to multiply all the numbers in a list.**
+
+    Sample List : [1, 2, 3, -4]
+    Expected Output : -24
+
+
+```python
+def multiply(numbers):  
+    pass
+```
+
+
+```python
+multiply([1,2,3,-4])
+```
+
+
+
+
+    -24
+
+
+
+____
+**Write a Python function that checks whether a word or phrase is palindrome or not.**
+
+Note: A palindrome is word, phrase, or sequence that reads the same backward as forward, e.g., madam,kayak,racecar, or a phrase "nurses run". Hint: You may want to check out the .replace() method in a string to help out with dealing with spaces. Also google search how to reverse a string in Python, there are some clever ways to do it with slicing notation.
+
+
+```python
+def palindrome(s):
+    pass
+```
+
+
+```python
+palindrome('helleh')
+```
+
+
+
+
+    True
+
+
+
+____
+#### Hard:
+
+**Write a Python function to check whether a string is pangram or not. (Assume the string passed in does not have any punctuation)**
+
+    Note : Pangrams are words or sentences containing every letter of the alphabet at least once.
+    For example : "The quick brown fox jumps over the lazy dog"
+
+Hint: You may want to use .replace() method to get rid of spaces.
+
+Hint: Look at the [string module](https://stackoverflow.com/questions/16060899/alphabet-range-in-python)
+
+Hint: In case you want to use [set comparisons](https://medium.com/better-programming/a-visual-guide-to-set-comparisons-in-python-6ab7edb9ec41)
+
+
+```python
+import string
+
+def ispangram(str1, alphabet=string.ascii_lowercase):
+    pass
+```
+
+
+```python
+ispangram("The quick brown fox jumps over the lazy dog")
+```
+
+
+
+
+    True
+
+
+
+
+```python
+string.ascii_lowercase
+```
+
+
+
+
+    'abcdefghijklmnopqrstuvwxyz'
+
+
+
+#### Great Job!
