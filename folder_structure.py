@@ -9,7 +9,7 @@ import re
 def path_to_dict(root_path):
     
     includes = ['*.md', '*.ipynb'] # for files only
-    excludes = ['.vscode', '.git', 'Books', 'Code', 'Presentations'] # for dirs and files
+    excludes = ['.vscode', '.git', '__pycache__', 'Books', 'Code', 'Presentations'] # for dirs and files
 
     # transform glob patterns to regular expressions
     includes = r'|'.join([fnmatch.translate(x) for x in includes])
