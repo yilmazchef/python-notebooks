@@ -13,15 +13,11 @@ if __name__ == "__main__":
     cwd = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
 
     start = time.time()    # for testing purposes
-    cwd = os.getcwd()
-
-    os.chdir(cwd)
-
-    
+    cwd = os.getcwd() + os.path.sep + "Notebooks" + os.path.sep + "English"
 
     tree = path_to_dict(cwd)
 
-    dict_to_json(tree, cwd + os.path.sep + "data.json")
+    dict_to_json(tree, os.getcwd() + os.path.sep + "data.json")
 
     end = time.time()
     print(end - start)

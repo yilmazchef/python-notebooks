@@ -9,9 +9,9 @@ import re
 
 def path_to_dict(root_path):
 
-    includes = ['*.md', '*.ipynb']  # for files only
-    excludes = ['.vscode', '.git', '__pycache__', 'Books',
-                'Code', 'Presentations']  # for dirs and files
+    includes = ['*.md']  # for files only
+    excludes = ['.vscode', '.git', '*/__pycache__', '*/.ipynb_checkpoints',
+                'Books', 'Code', 'Presentations']  # for dirs and files
 
     # transform glob patterns to regular expressions
     includes = r'|'.join([fnmatch.translate(x) for x in includes])
@@ -37,7 +37,7 @@ def path_to_dict(root_path):
         }
 
         tree["child"].extend(
-            [path_to_dict(os.path.join(root, d)) for d in dirs]
+            [path_to_dict(os.path.join(root, d)) for d in dirs if len(d) > 0]
         )
 
         tree["child"].extend(
@@ -55,9 +55,9 @@ def path_to_dict(root_path):
         return tree
 
 
-def dict_to_json(dict_path:dict, json_path:str):
+def dict_to_json(dict_path: dict, json_path: str):
     with open(json_path, 'w') as file:
-        
+
         json_string = json.dumps(
             dict_path, default=lambda o: o.__dict__, sort_keys=True, indent=2)
         file.write(json_string)
