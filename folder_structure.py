@@ -23,7 +23,7 @@ def path_to_dict(root_path, language):
     GITHUB_REPO = os.getenv('GITHUB_PYTHON_NOTEBOOKS_REPO') if os.getenv(
         'GITHUB_PYTHON_NOTEBOOKS_REPO') is not None else str(input("Github repository name: "))
 
-    includes = ['*.md', '*.docx']  # for files only
+    includes = ['*.md']  # for files only
     excludes = ['.vscode', '.git', '*/__pycache__', '*/.ipynb_checkpoints',
                 'Books', 'Codes', 'Presentations', 'Temp']  # for dirs and files
 
