@@ -5,13 +5,27 @@ from uuid import uuid4
 import json
 import fnmatch
 import re
+from urllib.parse import quote
 
 
-def path_to_dict(root_path):
+def path_to_dict(root_path, language):
+
+    # Get environment variables
+    if os.getenv('GITHUB_USERNAME') is None:
+        os.environ["GITHUB_USERNAME"] = str(input("Github username: "))
+
+    if os.getenv('GITHUB_PYTHON_NOTEBOOKS_REPO') is None:
+        os.environ["GITHUB_PYTHON_NOTEBOOKS_REPO"] = str(
+            input("Github repository name: "))
+
+    GITHUB_USERNAME = os.getenv('GITHUB_USERNAME') if os.getenv(
+        'GITHUB_USERNAME') is not None else str(input("Github username: "))
+    GITHUB_REPO = os.getenv('GITHUB_PYTHON_NOTEBOOKS_REPO') if os.getenv(
+        'GITHUB_PYTHON_NOTEBOOKS_REPO') is not None else str(input("Github repository name: "))
 
     includes = ['*.md']  # for files only
     excludes = ['.vscode', '.git', '*/__pycache__', '*/.ipynb_checkpoints',
-                'Books', 'Code', 'Presentations']  # for dirs and files
+                'Books', 'Codes', 'Presentations', 'Temp']  # for dirs and files
 
     # transform glob patterns to regular expressions
     includes = r'|'.join([fnmatch.translate(x) for x in includes])
@@ -31,36 +45,28 @@ def path_to_dict(root_path):
         tree = {
             "name": os.path.basename(root),
             "test": str(uuid4()),
-            "icon": "folder",
-            "type": "folder",
             "child": []
         }
 
         tree["child"].extend(
-            [path_to_dict(os.path.join(root, d)) for d in dirs if len(d) > 0]
+            [path_to_dict(os.path.join(root, d), language)
+             for d in dirs if len(d) > 0]
         )
 
         tree["child"].extend(
             [{
                 "name": os.path.basename(os.path.join(root, f)),
                 "test": str(uuid4()),
-                "icon": pathlib.Path(os.path.join(root, f)).suffix,
-                "link": str(os.path.join(root, f)),
-                "type": "file"
+                "link": str(
+                    "https://raw.githubusercontent.com/"+ str(GITHUB_USERNAME) +"/"+ str(GITHUB_REPO) +"/main/" + "Notebooks" + "/"
+                    + language + "/" + quote(os.path.basename(root)) + "/" + quote(os.path.basename(f)) 
+                ),
             } for f in files]
         )
 
         tree = {k: v for k, v in tree.items() if v}
 
         return tree
-
-
-def dict_to_json(dict_path: dict, json_path: str):
-    with open(json_path, 'w') as file:
-
-        json_string = json.dumps(
-            dict_path, default=lambda o: o.__dict__, sort_keys=True, indent=2)
-        file.write(json_string)
 
 
 def notebook_file_paths(folder_path, file_type):

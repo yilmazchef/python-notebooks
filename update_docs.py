@@ -6,6 +6,7 @@ import sys
 import json
 import time
 import uuid
+from folder_structure import notebook_file_paths
 
 
 def to_py(ipynb_file):
@@ -56,14 +57,6 @@ def to_json(md_file, json_file):
     pass
 
 
-def to_pdf(md_file, pdf_file):
-    print(f"{md_file} to \"{pdf_file}\" conversion started...")
-    cmdlet = f"pandoc -t odt \"{md_file}\" -o \"{pdf_file}\""
-    print(cmdlet)
-    os.system(cmdlet)
-    print(f"\"{md_file}\" to \"{pdf_file}\" conversion complete...")
-
-
 if __name__ == "__main__":
 
     src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
@@ -71,13 +64,12 @@ if __name__ == "__main__":
 
     for ipynb_file in ipynb_file_list:
         md_file = ipynb_file.replace(".ipynb", ".md")
-        # docx_file = ipynb_file.replace(".ipynb", ".docx")
-        # odt_file = ipynb_file.replace(".ipynb", ".odt")
+        docx_file = ipynb_file.replace(".ipynb", ".docx")
 
         print("#" * 255)
 
         to_md(ipynb_file, md_file)
-        # to_docx(md_file, docx_file)
+        to_docx(md_file, docx_file)
 
         print("#" * 255)
 

@@ -12,6 +12,21 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    ModuleNotFoundError                       Traceback (most recent call last)
+
+    c:\Users\Administrator\Desktop\python-notebooks\Notebooks\Nederlands\Milestone Project 4 - Game of Thrones - Netwerkvisualisatie\GoT_Network.ipynb Cell 3' in <cell line: 2>()
+          <a href='vscode-notebook-cell:/c%3A/Users/Administrator/Desktop/python-notebooks/Notebooks/Nederlands/Milestone%20Project%204%20-%20Game%20of%20Thrones%20-%20Netwerkvisualisatie/GoT_Network.ipynb#ch0000002?line=0'>1</a> import pandas as pd
+    ----> <a href='vscode-notebook-cell:/c%3A/Users/Administrator/Desktop/python-notebooks/Notebooks/Nederlands/Milestone%20Project%204%20-%20Game%20of%20Thrones%20-%20Netwerkvisualisatie/GoT_Network.ipynb#ch0000002?line=1'>2</a> import networkx as nx
+          <a href='vscode-notebook-cell:/c%3A/Users/Administrator/Desktop/python-notebooks/Notebooks/Nederlands/Milestone%20Project%204%20-%20Game%20of%20Thrones%20-%20Netwerkvisualisatie/GoT_Network.ipynb#ch0000002?line=2'>3</a> import matplotlib.pyplot as plt
+          <a href='vscode-notebook-cell:/c%3A/Users/Administrator/Desktop/python-notebooks/Notebooks/Nederlands/Milestone%20Project%204%20-%20Game%20of%20Thrones%20-%20Netwerkvisualisatie/GoT_Network.ipynb#ch0000002?line=3'>4</a> get_ipython().run_line_magic('matplotlib', 'inline')
+    
+
+    ModuleNotFoundError: No module named 'networkx'
+
+
 ### Load and process data
 
 
