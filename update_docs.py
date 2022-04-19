@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 
+from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
+    AdaptiveETA, FileTransferSpeed, FormatLabel, Percentage, \
+    ProgressBar, ReverseBar, RotatingMarker, \
+    SimpleProgress, Timer, UnknownLength
 import os
 import sys
 import json
@@ -8,11 +12,12 @@ import time
 import uuid
 from folder_structure import notebook_file_paths
 from docx_manager import addFooter, addHeader
+import collections.abc
+from pptx import Presentation
+from pptx.util import Cm, Inches, Pt
 
-from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
-    AdaptiveETA, FileTransferSpeed, FormatLabel, Percentage, \
-    ProgressBar, ReverseBar, RotatingMarker, \
-    SimpleProgress, Timer, UnknownLength
+c = collections
+c.abc = collections.abc
 
 
 def to_py(ipynb_file):
@@ -31,6 +36,49 @@ def to_py(ipynb_file):
             for line in cell['source']:
                 print("#", line, end='')
             print('\n')
+
+
+def to_pptx(ipynb_path, pptx_path, header_image_path):
+
+    prs = Presentation(pptx_path)
+    blank_slide_layout = prs.slide_layouts[6]
+
+    code = json.load(open(ipynb_path))
+
+    slide = prs.slides.add_slide(blank_slide_layout)
+    left = top = Inches(1)
+    pic = slide.shapes.add_picture(header_image_path, left, top)
+
+    for cell in code['cells']:
+        if cell['cell_type'] == 'code':
+            slide = prs.slides.add_slide(blank_slide_layout)
+            left = top = width = height = Inches(1)
+            txBox = slide.shapes.add_textbox(left, top, width, height)
+            tf = txBox.text_frame
+            tf.text = "Python Code: "
+
+            for line in cell['source']:
+                p = tf.add_paragraph()
+                p.text = "``` " + line + " ```"
+                p.font.size = Pt(12)
+
+            p.text += "\n"
+
+        elif cell['cell_type'] == 'markdown':
+            slide = prs.slides.add_slide(blank_slide_layout)
+            left = top = width = height = Inches(1)
+            txBox = slide.shapes.add_textbox(left, top, width, height)
+            tf = txBox.text_frame
+            tf.text = "Info:"
+
+            for line in cell['source']:
+                p = tf.add_paragraph()
+                p.text = line
+                p.font.size = Pt(12)
+
+            p.text += "\n"
+
+    prs.save(pptx_path)
 
 
 def to_md(ipynb_file, md_file):
@@ -87,9 +135,11 @@ if __name__ == "__main__":
 
         md_file = ipynb_file.replace(".ipynb", ".md")
         docx_file = ipynb_file.replace(".ipynb", ".docx")
+        pptx_file = ipynb_file.replace(".ipynb", ".pptx")
 
         to_md(ipynb_file, md_file)
         to_docx(md_file, docx_file)
+        to_pptx(ipynb_file, pptx_file, os.path.join(os.getcwd(), "Temp", "IntecHeader.png"))
 
         pBarCount += 1
         pBar.update(pBarCount)
