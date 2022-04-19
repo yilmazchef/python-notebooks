@@ -11,33 +11,24 @@ from urllib.parse import quote
 def path_to_dict(root_path, language):
 
     # Get environment variables
-    if os.getenv('GITHUB_USERNAME') is None:
-        os.environ["GITHUB_USERNAME"] = str(input("Github username: "))
-
-    if os.getenv('GITHUB_PYTHON_NOTEBOOKS_REPO') is None:
-        os.environ["GITHUB_PYTHON_NOTEBOOKS_REPO"] = str(
-            input("Github repository name: "))
-
-    GITHUB_USERNAME = os.getenv('GITHUB_USERNAME') if os.getenv(
-        'GITHUB_USERNAME') is not None else str(input("Github username: "))
-    GITHUB_REPO = os.getenv('GITHUB_PYTHON_NOTEBOOKS_REPO') if os.getenv(
-        'GITHUB_PYTHON_NOTEBOOKS_REPO') is not None else str(input("Github repository name: "))
+    username = str(input("Github username: "))
+    repository = str(input("Github repository: "))
 
     includes = ['*.md']  # for files only
-    excludes = ['.vscode', '.git', '*/__pycache__', '*/.ipynb_checkpoints',
+    excludes = ['.vscode', '.git', '*/__pycache__', '*/.ipynb_checkpoints', 'venv', 'pyvenv', 'tempvenv',
                 'Books', 'Codes', 'Presentations', 'Temp']  # for dirs and files
 
-    # transform glob patterns to regular expressions
+    # transforms glob patterns to regular expressions
     includes = r'|'.join([fnmatch.translate(x) for x in includes])
     excludes = r'|'.join([fnmatch.translate(x) for x in excludes]) or r'$.'
 
     for root, dirs, files in os.walk(root_path, topdown=True):
 
-        # exclude dirs
+        # excludes dirs
         dirs[:] = [os.path.join(root, d) for d in dirs]
         dirs[:] = [d for d in dirs if not re.match(excludes, d)]
 
-        # exclude/include files
+        # excludes/includes files
         files = [os.path.join(root, f) for f in files]
         files = [f for f in files if not re.match(excludes, f)]
         files = [f for f in files if re.match(includes, f)]
@@ -58,14 +49,13 @@ def path_to_dict(root_path, language):
                 "name": os.path.basename(os.path.join(root, f)),
                 "test": str(uuid4()),
                 "icon": '''<img src={`/icons/${getIconForFile('index.md')}`} alt="markdown" className="icon" />''',
-                "link": str(
+                "link":
                     "https://raw.githubusercontent.com/" +
-                        str(GITHUB_USERNAME) + "/" + str(GITHUB_REPO) +
+                        username + "/" + repository +
                     "/main/" + "Notebooks" + "/"
                     + language + "/" +
                         quote(os.path.basename(root)) +
-                    "/" + quote(os.path.basename(f))
-                ),
+                    "/" + quote(os.path.basename(f)),
             } for f in files]
         )
 
