@@ -52,8 +52,14 @@ Laten we nu beginnen met wat basisrekenkunde.
 
 
 ```python
+# Sum 
+100 + 200
+```
+
+
+```python
 # Sum
-2+4
+2+1
 ```
 
 

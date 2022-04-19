@@ -32,7 +32,7 @@ Hint: dit is alleen om je geheugen/kennis van de rekenkundige basiscommando's te
 
 
 ```python
-
+# voeg je code hier toe ..
 ```
 
 Beantwoord deze 3 vragen zonder code te typen. Typ vervolgens code om je antwoord te controleren.

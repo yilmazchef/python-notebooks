@@ -44,6 +44,7 @@ append() stelt ons in staat om elementen toe te voegen aan het einde van een lij
 
 ```python
 lst.append(6)
+
 ```
 
 

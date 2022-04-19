@@ -24,11 +24,11 @@ def path_to_dict(root_path: str, language: str) -> dict:
 
     for root, dirs, files in os.walk(root_path, topdown=True):
 
-        # excludes dirs
+        # exclude dirs
         dirs[:] = [os.path.join(root, d) for d in dirs]
         dirs[:] = [d for d in dirs if not re.match(excludes, d)]
 
-        # excludes/includes files
+        # exclude/include files
         files = [os.path.join(root, f) for f in files]
         files = [f for f in files if not re.match(excludes, f)]
         files = [f for f in files if re.match(includes, f)]
@@ -49,13 +49,13 @@ def path_to_dict(root_path: str, language: str) -> dict:
                 "name": os.path.basename(os.path.join(root, f)),
                 "test": str(uuid4()),
                 "icon": '''<img src={`/icons/${getIconForFile('index.md')}`} alt="markdown" className="icon" />''',
-                "link":
-                    "https://raw.githubusercontent.com/" +
-                        username + "/" + repository +
-                    "/main/" + "Notebooks" + "/"
+                "link": str(
+                    "https://raw.githubusercontent.com/" + GITHUB_USERNAME +
+                    "/" + GITHUB_REPO + "/main/" + "Notebooks" + "/"
                     + language + "/" +
-                        quote(os.path.basename(root)) +
-                    "/" + quote(os.path.basename(f)),
+                    quote(os.path.basename(root)) +
+                    "/" + quote(os.path.basename(f))
+                ),
             } for f in files]
         )
 
