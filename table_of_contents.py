@@ -4,7 +4,7 @@ import sys
 import json
 import time
 from uuid import uuid4
-from folder_structure import path_to_dict
+from folder_manager import path_to_dict
 
 if __name__ == "__main__":
 
