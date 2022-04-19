@@ -1,8 +1,10 @@
 import collections.abc
+from email import charset
 from pptx import Presentation
 from pptx.util import Cm, Inches, Pt
 import json
 import os
+import sys
 
 c = collections
 c.abc = collections.abc
@@ -14,14 +16,17 @@ def to_pptx(ipynb_path, header_image_path=None):
     prs = Presentation(pptx_path)
     blank_slide_layout = prs.slide_layouts[6]
 
-    code = json.load(open(ipynb_path))
+    notebook = json.load(
+        open(ipynb_path, encoding='utf-8', errors='replace'))
+
+    cells = notebook['cells']
 
     slide = prs.slides.add_slide(blank_slide_layout)
     left = top = Inches(1)
     if header_image_path is not None:
         slide.shapes.add_picture(header_image_path, left, top)
 
-    for cell in code['cells']:
+    for cell in cells:
         if cell['cell_type'] == 'code':
             slide = prs.slides.add_slide(blank_slide_layout)
             left = top = width = height = Inches(1)

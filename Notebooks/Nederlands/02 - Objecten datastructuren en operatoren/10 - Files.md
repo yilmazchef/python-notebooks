@@ -121,6 +121,7 @@ my_file.seek(0)
 ```python
 # Lees nu nog eens
 my_file.read()
+
 ```
 
 

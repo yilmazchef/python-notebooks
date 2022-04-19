@@ -15,7 +15,7 @@ Let's explore a little deeper. We've learned how to create functions with <code>
 In most aspects, a generator function will appear very similar to a normal function. The main difference is when a generator function is compiled they become an object that supports an iteration protocol. That means when they are called in your code they don't actually return a value and then exit. Instead, generator functions will automatically suspend and resume their execution and state around the last point of value generation. The main advantage here is that instead of having to compute an entire series of values up front, the generator computes one value and then suspends its activity awaiting the next instruction. This feature is known as *state suspension*.
 
 
-￼￼To start getting a better understanding of generators, let's go ahead and see how we can create some.
+To start getting a better understanding of generators, let's go ahead and see how we can create some.
 
 
 ```python
@@ -232,6 +232,7 @@ next(s_iter)
 
 ```python
 next(s_iter)
+
 ```
 
 

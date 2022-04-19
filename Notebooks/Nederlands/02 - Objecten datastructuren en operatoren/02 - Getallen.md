@@ -53,7 +53,7 @@ Laten we nu beginnen met wat basisrekenkunde.
 
 ```python
 # Sum
-2+1
+2+4
 ```
 
 
