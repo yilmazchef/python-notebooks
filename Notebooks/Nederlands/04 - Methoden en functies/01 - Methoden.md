@@ -4,7 +4,7 @@
     <em>Python les-materialen</em>
 </center>
 
-# Methoden
+# Methoden en functies
 
 We hebben al een paar voorbeelden van methoden gezien bij het leren over object- en gegevensstructuurtypen in Python. Methoden zijn in wezen functies die in objecten zijn ingebouwd. 
 Later in de cursus leren we hoe we onze eigen objecten en methoden kunnen maken met behulp van Object Oriented Programming (OOP) en klassen.
@@ -23,7 +23,7 @@ Laten we eens kijken wat een voorbeeld is van de verschillende methoden die een 
 
 ```python
 # Create a simple list
-lst = [1,2,3,4,5]
+lst = [1,2,3,4,5,6,7,8,9,10]
 ```
 
 Gelukkig kunnen we met iPython en de Jupyter Notebook snel alle mogelijke methoden zien met behulp van de tab-toets (tab-key). De methoden voor een lijst zijn:

@@ -17,7 +17,7 @@ st = 'Print only the words that start with s in this sentence'
 
 
 ```python
-#Code here
+
 ```
 
 ______
@@ -25,7 +25,7 @@ ______
 
 
 ```python
-#Code Here
+
 ```
 
 ___
@@ -33,7 +33,6 @@ ___
 
 
 ```python
-#Code in this cell
 []
 ```
 
@@ -47,7 +46,7 @@ st = 'Print every word in this sentence that has an even number of letters'
 
 
 ```python
-#Code in this cell
+
 ```
 
 ____
@@ -55,7 +54,7 @@ ____
 
 
 ```python
-#Code in this cell
+
 ```
 
 ____
@@ -68,7 +67,7 @@ st = 'Create a list of the first letters of every word in this string'
 
 
 ```python
-#Code in this cell
+
 ```
 
 ### Great Job!

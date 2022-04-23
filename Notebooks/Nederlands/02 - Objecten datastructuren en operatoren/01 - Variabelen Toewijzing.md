@@ -1,8 +1,5 @@
-<center>
-    <img src='https://intecbrussel.be/img/logo3.png' width='400px' height='auto'/>
-    <br/>
-    <em>Python les-materialen</em>
-</center>
+![](https://intecbrussel.be/img/logo3.png)  
+_Python les-materialen_
 
 # Variabele Toewijzing (Assignments)
 
