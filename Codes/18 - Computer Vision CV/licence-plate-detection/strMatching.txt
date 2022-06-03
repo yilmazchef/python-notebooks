@@ -1,0 +1,16 @@
+def acuraccy(ocr_otput,input_file): # ocr_output-> read from the ocr, input_file-> read from the input file
+    plates=0 ## counter for whole plates acuraccy
+    correct=0 
+    uncorrect=0
+    illuminate_space=ocr_otput.replace(" ","") # remove spaces
+    capital_letter =  illuminate_space.upper() #change lower case to upper
+    if capital_letter==input_file:## whole matching
+        plates=plates+1
+        correct=len(capital_letter)
+    else:
+        for i in range(len(input_file)):
+            if input_file[i]==capital_letter[i]:
+                correct=correct+1
+            else:
+                uncorrect=uncorrect+1
+    return plates,correct,uncorrect ## return: "plates->1 means whole matching, 0 means there's error","correct->number of correct char","uncorrect->number of uncorrect char"

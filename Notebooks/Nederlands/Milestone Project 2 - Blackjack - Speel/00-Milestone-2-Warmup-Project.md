@@ -16,12 +16,10 @@ Before we launch in to the OOP Milestone 2 Project, let's walk through together 
 
 Here we will use some outside variables that we know don't change regardless of the situation, such as a deck of cards. Regardless of what round,match, or game we're playing, we'll still need the same deck of cards.
 
-
 ```python
 # We'll use this later
 import random 
 ```
-
 
 ```python
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
@@ -29,7 +27,6 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 
             'Nine':9, 'Ten':10, 'Jack':11, 'Queen':12, 'King':13, 'Ace':14}
 ```
-
 
 ```python
 class Card:
@@ -45,90 +42,51 @@ class Card:
 
 Create an example card
 
-
 ```python
 suits[0]
 ```
 
-
-
-
     'Hearts'
-
-
-
 
 ```python
 ranks[0]
 ```
 
-
-
-
     'Two'
-
-
-
 
 ```python
 two_hearts = Card(suits[0],ranks[0])
 ```
 
-
 ```python
 two_hearts
 ```
 
-
-
-
     <__main__.Card at 0x1dfaff6b898>
-
-
-
 
 ```python
 print(two_hearts)
 ```
 
     Two of Hearts
-    
-
 
 ```python
 two_hearts.rank
 ```
 
-
-
-
     'Two'
-
-
-
 
 ```python
 two_hearts.value
 ```
 
-
-
-
     2
-
-
-
 
 ```python
 values[two_hearts.rank]
 ```
 
-
-
-
     2
-
-
 
 ## Deck Class
 
@@ -137,7 +95,6 @@ values[two_hearts.rank]
 We just created a single card, but how can we create an entire Deck of cards? Let's explore doing this with a class that utilizes the Card class.
 
 A Deck will be made up of multiple Cards. Which mean's we will actually use the Card class within the \_\_init__ of the Deck class.
-
 
 ```python
 class Deck:
@@ -161,68 +118,47 @@ class Deck:
 
 ### Create a Deck
 
-
 ```python
 mydeck = Deck()
 ```
-
 
 ```python
 len(mydeck.all_cards)
 ```
 
-
-
-
     52
-
-
-
 
 ```python
 mydeck.all_cards[0]
 ```
 
-
-
-
     <__main__.Card at 0x1dfaff269e8>
-
-
-
 
 ```python
 print(mydeck.all_cards[0])
 ```
 
     Two of Hearts
-    
-
 
 ```python
 mydeck.shuffle()
 ```
-
 
 ```python
 print(mydeck.all_cards[0])
 ```
 
     Five of Spades
-    
-
 
 ```python
 my_card = mydeck.deal_one()
 ```
-
 
 ```python
 print(my_card)
 ```
 
     King of Clubs
-    
 
 # Player Class
 
@@ -231,7 +167,6 @@ Let's create a Player Class, a player should be able to hold instances of Cards,
 We'll keep this all in mind as we create the methods for the Player class.
 
 ### Player Class
-
 
 ```python
 class Player:
@@ -258,76 +193,53 @@ class Player:
         return f'Player {self.name} has {len(self.all_cards)} cards.'
 ```
 
-
 ```python
 jose = Player("Jose")
 ```
-
 
 ```python
 jose
 ```
 
-
-
-
     <__main__.Player at 0x1dfaff8b940>
-
-
-
 
 ```python
 print(jose)
 ```
 
     Player Jose has 0 cards.
-    
-
 
 ```python
 two_hearts
 ```
 
-
-
-
     <__main__.Card at 0x1dfaff6b898>
-
-
-
 
 ```python
 jose.add_cards(two_hearts)
 ```
-
 
 ```python
 print(jose)
 ```
 
     Player Jose has 1 cards.
-    
-
 
 ```python
 jose.add_cards([two_hearts,two_hearts,two_hearts])
 ```
-
 
 ```python
 print(jose)
 ```
 
     Player Jose has 4 cards.
-    
 
 ## War Game Logic
-
 
 ```python
 player_one = Player("One")
 ```
-
 
 ```python
 player_two = Player("Two")
@@ -335,11 +247,9 @@ player_two = Player("Two")
 
 ## Setup New Game
 
-
 ```python
 new_deck = Deck()
 ```
-
 
 ```python
 new_deck.shuffle()
@@ -347,18 +257,11 @@ new_deck.shuffle()
 
 ### Split the Deck between players
 
-
 ```python
 len(new_deck.all_cards)/2
 ```
 
-
-
-
     26.0
-
-
-
 
 ```python
 for x in range(26):
@@ -366,54 +269,33 @@ for x in range(26):
     player_two.add_cards(new_deck.deal_one())
 ```
 
-
 ```python
 len(new_deck.all_cards)
 ```
 
-
-
-
     0
-
-
-
 
 ```python
 len(player_one.all_cards)
 ```
 
-
-
-
     26
-
-
-
 
 ```python
 len(player_two.all_cards)
 ```
 
-
-
-
     26
 
-
-
 ## Play the Game
-
 
 ```python
 import pdb
 ```
 
-
 ```python
 game_on = True
 ```
-
 
 ```python
 round_num = 0
@@ -524,10 +406,8 @@ while game_on:
     Round 26
     Round 27
     Player One out of cards! Game Over
-    
 
 ## Game Setup in One Cell
-
 
 ```python
 player_one = Player("One")
@@ -542,7 +422,6 @@ for x in range(26):
     
 game_on = True
 ```
-
 
 ```python
 round_num = 0
@@ -998,54 +877,38 @@ while game_on:
     WAR!
     Player Two unable to play war! Game Over at War
     Player One Wins! Player One Loses!
-    
-
 
 ```python
 len(player_one.all_cards)
 ```
 
-
-
-
     27
-
-
-
 
 ```python
 len(player_two.all_cards)
 ```
 
-
-
-
     25
-
-
-
 
 ```python
 print(player_one_cards[-1])
 ```
 
     Ace of Diamonds
-    
-
 
 ```python
 print(player_two_cards[-1])
 ```
 
     Four of Hearts
-    
 
-## Great Work!
+## Great Work
 
 Other links that may interest you:
-* https://www.reddit.com/r/learnpython/comments/7ay83p/war_card_game/
-* https://codereview.stackexchange.com/questions/131174/war-card-game-using-classes
-* https://gist.github.com/damianesteban/6896120
-* https://lethain.com/war-card-game-in-python/
-* https://hectorpefo.github.io/2017-09-13-Card-Wars/
-* https://www.wimpyprogrammer.com/the-statistics-of-war-the-card-game
+
+* <https://www.reddit.com/r/learnpython/comments/7ay83p/war_card_game/>
+* <https://codereview.stackexchange.com/questions/131174/war-card-game-using-classes>
+* <https://gist.github.com/damianesteban/6896120>
+* <https://lethain.com/war-card-game-in-python/>
+* <https://hectorpefo.github.io/2017-09-13-Card-Wars/>
+* <https://www.wimpyprogrammer.com/the-statistics-of-war-the-card-game>
