@@ -7,6 +7,8 @@ Website: https://www.computervision.zone/
 import cv2
 import mediapipe as mp
 
+CAMERA_PORT = 0
+
 
 class FaceDetector:
     """
@@ -56,7 +58,7 @@ class FaceDetector:
 
 
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(CAMERA_PORT)
     detector = FaceDetector()
     while True:
         success, img = cap.read()

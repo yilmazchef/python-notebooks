@@ -8,6 +8,7 @@ import tensorflow.keras
 import numpy as np
 import cv2
 
+WEBCAM_PORT = 0
 
 class Classifier:
 
@@ -56,7 +57,7 @@ class Classifier:
 
 
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(WEBCAM_PORT)
     maskClassifier = Classifier('Model/keras_model.h5', 'Model/labels.txt')
     while True:
         _, img = cap.read()

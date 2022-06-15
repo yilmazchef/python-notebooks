@@ -54,6 +54,7 @@ class Game:
         self.player_selections = {'X': [], 'O': []}
 
         # Defining Function to check Victory
+
     def checkVictory(self, playerpos, curplayer):
 
         # Loop to check whether any winning combination is satisfied or not

@@ -7,6 +7,8 @@ Website: https://www.computervision.zone/
 import time
 import cv2
 
+WEBCAM_PORT = 0
+
 
 class FPS:
     """
@@ -56,7 +58,7 @@ def mainWebcam():
     With Webcam
     """
     fpsReader = FPS()
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(WEBCAM_PORT)
     while True:
         success, img = cap.read()
         fps, img = fpsReader.update(img)

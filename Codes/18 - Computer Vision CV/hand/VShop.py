@@ -6,6 +6,8 @@ import numpy as np
 # Parameters
 from screeninfo import get_monitors
 
+WEBCAM_PORT = 0
+
 width, height = 1920, 1080
 gestureThreshold = 300
 path_folder = "shop"
@@ -17,7 +19,7 @@ for m in get_monitors():
         primary_monitor = m
         break
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(WEBCAM_PORT)
 cap.set(3, primary_monitor.width)
 cap.set(4, primary_monitor.height)
 

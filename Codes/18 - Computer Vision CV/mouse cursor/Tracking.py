@@ -3,12 +3,15 @@
 
 import cv2
 
+INTERNAL_CAM = 0
+EXTERNAL_CAM = 1
+
 
 def main():
     # Define an initial bounding box
     bbox = (150, 130, 60, 100)
 
-    video_feed = cv2.VideoCapture(0)
+    video_feed = cv2.VideoCapture(EXTERNAL_CAM)
 
     tracker = calibrate_webcam(video_feed, bbox)
 

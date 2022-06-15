@@ -177,7 +177,7 @@ def main():
     cap = cv2.VideoCapture(0)
     while True:
         success, img = cap.read()
-        img, bbox = putTextRect(img, "CVZone", [50, 50], 2, 2, offset=10, border=5)
+        img, bbox = putTextRect(img, "Intec Brussel", [50, 50], 2, 2, offset=10, border=5)
         imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         imgList = [img, img, imgGray, img, imgGray]
         imgStacked = stackImages(imgList, 2, 0.5)

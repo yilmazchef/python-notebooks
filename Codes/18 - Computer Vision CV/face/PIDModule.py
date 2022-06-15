@@ -65,8 +65,7 @@ def main():
             xPID.draw(img, [cx, cy])
             yPID.draw(img, [cx, cy])
 
-            cv2.putText(img, f'x:{xVal} , y:{yVal} ', (x, y - 100), cv2.FONT_HERSHEY_PLAIN, 3,
-                        (255, 0, 0), 3)
+            cv2.putText(img, f'x:{xVal} , y:{yVal} ', (x, y - 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
         cv2.imshow("Image", img)
         cv2.waitKey(1)

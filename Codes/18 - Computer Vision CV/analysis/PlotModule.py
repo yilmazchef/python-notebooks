@@ -3,6 +3,8 @@ import numpy as np
 import time
 import math
 
+INTERNAL_CAM = 0
+EXTERNAL_CAM = 1
 
 class LivePlot:
     def __init__(self, w=640, h=480, yLimit=[0, 100],
