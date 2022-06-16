@@ -31,10 +31,10 @@ class Email:
         responses = {}
         for recipient in self.recipients:
             response = requests.post(
-                "https://api.mailgun.net/v3/sandbox7f79f3598b5b44babe4a1a6154f6486d.mailgun.org/messages",
-                auth=("api", "e916e6727e1172c0754ad3b6ce82003a-0677517f-6bc2e3c9"),
+                "MAIL_GUN_URL",
+                auth=("api", "MAIL_GUN_API_KEY"),
                 data={
-                    "from": f"{self.sender} <postmaster@sandbox7f79f3598b5b44babe4a1a6154f6486d.mailgun.org>",
+                    "from": f"{self.sender} MAIL_GUN_EMAIL",
                     "to": f"{recipient} <{recipient.email}>",
                     "subject": f"{self.subject}",
                     "text": f"{self.content}"})
@@ -61,9 +61,9 @@ class Email:
 
 sender = User("Justin", "Bieber", "just@in.be")
 recipients = [
-    User("Nikola", "Tesla", "chef@mail.be"),  # we are using the same email for testing purposes.
-    User("Marie", "Curie", "chef@mail.be"),  # we are using the same email for testing purposes.
-    User("Albert", "Einstein", "chef@mail.be")  # we are using the same email for testing purposes.
+    User("Nikola", "Tesla", "nikola@tesla.com"),  # we are using the same email for testing purposes.
+    User("Marie", "Curie", "marie@curie.net"),  # we are using the same email for testing purposes.
+    User("Albert", "Einstein", "albert@einstein.com")  # we are using the same email for testing purposes.
 ]
 email1 = Email(sender, recipients, "Hello MailGunAPI!", "This was awesome experience...!")
 
