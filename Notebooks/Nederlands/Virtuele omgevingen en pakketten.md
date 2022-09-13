@@ -9,11 +9,11 @@ author: Yilmaz Mustafa
 
 > ## Excerpt
 
-> Python applications will often use packages and modules that don’t
-come as part of the standard library.  Applications will sometimes
-need a specific version of a library, because the application may
-require that a particular bug has been fixed or the application may be
-written using an obsolete version of the library’s interface.
+> Python toepassingen zullen vaak pakketten en modules gebruiken die niet
+deel uitmaken van de standaard bibliotheek.  Toepassingen zullen soms
+een specifieke versie van een bibliotheek nodig hebben, omdat de toepassing
+vereist dat een bepaalde bug hersteld is of de toepassing kan geschreven zijn
+geschreven is met een verouderde versie van de interface van de bibliotheek.
 
 ---
 
@@ -21,30 +21,30 @@ written using an obsolete version of the library’s interface.
 
 ## 12.1. Introduction[¶](https://docs.python.org/3/tutorial/venv.html#introduction "Permalink to this headline")
 
-Python applications will often use packages and modules that don’t come as part of the standard library. Applications will sometimes need a specific version of a library, because the application may require that a particular bug has been fixed or the application may be written using an obsolete version of the library’s interface.
+Python toepassingen zullen vaak packages en modules gebruiken die geen deel uitmaken van de standaard bibliotheek. Toepassingen zullen soms een specifieke versie van een bibliotheek nodig hebben, omdat de toepassing kan vereisen dat een bepaalde bug hersteld is of omdat de toepassing geschreven kan zijn met een verouderde versie van de interface van de bibliotheek.
 
-This means it may not be possible for one Python installation to meet the requirements of every application. If application A needs version 1.0 of a particular module but application B needs version 2.0, then the requirements are in conflict and installing either version 1.0 or 2.0 will leave one application unable to run.
+Dit betekent dat één Python-installatie misschien niet aan de eisen van elke toepassing kan voldoen. Als applicatie A versie 1.0 van een bepaalde module nodig heeft, maar applicatie B heeft versie 2.0 nodig, dan zijn de vereisten in conflict en zal het installeren van versie 1.0 of 2.0 ervoor zorgen dat één applicatie niet kan draaien.
 
-The solution for this problem is to create a [virtual environment](https://docs.python.org/3/glossary.html#term-virtual-environment), a self-contained directory tree that contains a Python installation for a particular version of Python, plus a number of additional packages.
+De oplossing voor dit probleem is het maken van een [virtuele omgeving](https://docs.python.org/3/glossary.html#term-virtual-environment), een op zichzelf staande mapstructuur die een Python-installatie bevat voor een bepaalde versie van Python, plus een aantal aanvullende pakketten.
 
-Different applications can then use different virtual environments. To resolve the earlier example of conflicting requirements, application A can have its own virtual environment with version 1.0 installed while application B has another virtual environment with version 2.0. If application B requires a library be upgraded to version 3.0, this will not affect application A’s environment.
+Verschillende toepassingen kunnen dan verschillende virtuele omgevingen gebruiken. Om het eerdere voorbeeld van conflicterende vereisten op te lossen, kan applicatie A zijn eigen virtuele omgeving hebben met versie 1.0 geïnstalleerd, terwijl applicatie B een andere virtuele omgeving heeft met versie 2.0. Als applicatie B vereist dat een bibliotheek wordt opgewaardeerd naar versie 3.0, heeft dit geen invloed op de omgeving van applicatie A.
 
 ## 12.2. Creating Virtual Environments[¶](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments "Permalink to this headline")
 
-The module used to create and manage virtual environments is called [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Creation of virtual environments."). [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Creation of virtual environments.") will usually install the most recent version of Python that you have available. If you have multiple versions of Python on your system, you can select a specific Python version by running or whichever version you want.`python3`
+De module die gebruikt wordt om virtuele omgevingen te creëren en te beheren heet [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Aanmaken van virtuele omgevingen."). [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Creation of virtual environments.") zal gewoonlijk de meest recente versie van Python installeren die u beschikbaar heeft. Als u meerdere versies van Python op uw systeem heeft, kunt u een specifieke Python-versie selecteren door `python3` uit te voeren of welke versie u maar wilt.
 
-To create a virtual environment, decide upon a directory where you want to place it, and run the [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Creation of virtual environments.") module as a script with the directory path:
+Om een virtuele omgeving aan te maken, kiest u een directory waar u deze wilt plaatsen, en voert u de [`venv`](https://docs.python.org/3/library/venv.html#module-venv "venv: Creation of virtual environments.") module als een script met het directory pad:
 
 ```
 python3 -m venv tutorial-env
 
 ```
 
-This will create the directory if it doesn’t exist, and also create directories inside it containing a copy of the Python interpreter and various supporting files.`tutorial-env`
+Dit maakt de directory aan als die nog niet bestaat, en maakt er ook directories in aan met daarin een kopie van de Python interpreter en diverse ondersteunende bestanden.`tutorial-env`
 
-A common directory location for a virtual environment is . This name keeps the directory typically hidden in your shell and thus out of the way while giving it a name that explains why the directory exists. It also prevents clashing with environment variable definition files that some tooling supports.`.venv``.env`
+Een gebruikelijke directory locatie voor een virtuele omgeving is . Deze naam houdt de directory meestal verborgen in je shell en dus uit de weg, terwijl het een naam geeft die verklaart waarom de directory bestaat. Het voorkomt ook botsingen met omgevingsvariabele definitiebestanden die sommige tooling ondersteunt.`.venv``.env`
 
-Once you’ve created a virtual environment, you may activate it.
+Als u eenmaal een virtuele omgeving heeft aangemaakt, kunt u deze activeren.
 
 On Windows, run:
 
@@ -60,9 +60,9 @@ source tutorial-env/bin/activate
 
 ```
 
-(This script is written for the bash shell. If you use the **csh** or **fish** shells, there are alternate and scripts you should use instead.)`activate.csh``activate.fish`
+(Dit script is geschreven voor de bash shell. Als je de **csh** of **fish** shells gebruikt, zijn er alternatieven en scripts die je in plaats daarvan zou moeten gebruiken.)`activate.csh``activate.fish`
 
-Activating the virtual environment will change your shell’s prompt to show what virtual environment you’re using, and modify the environment so that running will get you that particular version and installation of Python. For example:`python`
+Het activeren van de virtuele omgeving zal de prompt van je shell veranderen om te laten zien welke virtuele omgeving je gebruikt, en zal de omgeving zo aanpassen dat het uitvoeren ervan je die specifieke versie en installatie van Python zal opleveren. Bijvoorbeeld: `python`
 
 ```
 $ source ~/envs/tutorial-env/bin/activate
