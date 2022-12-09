@@ -1,0 +1,7 @@
+watchdog
+progressbar
+python-docx
+python-pptx
+graphviz
+git-python
+pandoc

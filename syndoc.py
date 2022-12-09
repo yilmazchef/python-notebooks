@@ -4,12 +4,15 @@ import time
 import watchdog.events
 import watchdog.observers
 
+import configparser
+import json
+
 from uuid import uuid4
 from urllib.parse import quote
 
 import collections.abc
 from docx import Document
-from docx.shared import Inches
+from docx.shared import Inches, Pt, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
     AdaptiveETA, FileTransferSpeed, FormatLabel, Percentage, \
@@ -18,7 +21,27 @@ from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
 
 
 def dir2json(path):
+
+    import gitpython as git
+
     base = os.path.basename(path)
+
+    # read github repository name from .git/config
+    config = configparser.ConfigParser()
+    config.read(os.path.join(path, ".git/config"))
+    repo_name = config["remote \"origin\""]["url"].split(
+        "/")[-1].replace(".git", "")
+    username = config["remote \"origin\""]["url"].split("/")[-2]
+
+    git_info = {
+        "name": base,
+        "path": path,
+        "repo": repo_name,
+        "children": []
+    }
+
+    print(git_info)
+
     d = {
         'id': str(uuid4()),
         'name': base
@@ -28,8 +51,8 @@ def dir2json(path):
         d['child'] = [dir2json(os.path.join(path, x))
                       for x in os.listdir(path)]
     else:
-        pdf = f'https://raw.githubusercontent.com/yilmazchef/powershell-notebooks/main/Notebooks/English/{quote(base)}'
-        md = f'https://raw.githubusercontent.com/yilmazchef/powershell-notebooks/main/Notebooks/English/{quote(base.replace(".md", ".pdf"))}'
+        pdf = f'https://raw.githubusercontent.com/{quote(base)}/{quote(repo_name)}/main/Notebooks/English/{quote(base)}'
+        md = f'https://raw.githubusercontent.com/{quote(username)}/{quote(repo_name)}/main/Notebooks/English/{quote(base.replace(".md", ".pdf"))}'
 
         d['type'] = "file"
         d['link'] = md,
@@ -38,14 +61,41 @@ def dir2json(path):
     return d
 
 
-def only4md(folder_path: str, file_type: str) -> list:
+def dir2file(path):
+    json_file = os.path.join(path, "index.json")
+
+    with open(json_file, "w") as f:
+        json.dump(dir2json(path), f, indent=4)
+
+    return json_file
+
+
+def only4md(folder_path: str) -> list:
     paths = []
     for root, dirs, files in os.walk(folder_path):
         for file in files:
-            if file.lower().endswith(file_type.lower()):
+            if file.lower().endswith(".md"):
                 paths.append(os.path.join(root, file))
 
     return paths
+
+
+def only4ipynb(folder_path: str) -> list:
+    paths = []
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.lower().endswith(".ipynb"):
+                paths.append(os.path.join(root, file))
+
+    return paths
+
+
+def md2html(md_file: str) -> str:
+
+    html_file = md_file.replace(".md", ".html")
+    cmdlet = f"pandoc -o \"{html_file}\" \"{md_file}\""
+    os.system(cmdlet)
+    return html_file
 
 
 def img2base64(image_file, output_file):
@@ -116,7 +166,43 @@ def md2docx(md_file: str) -> str:
     return docx_file
 
 
+def img4docx(fileref, question, tpl, width=None):
+
+    if fileref.__class__.__name__ in ('DAFile', 'DAFileList', 'DAFileCollection', 'DALocalFile', 'DAStaticFile'):
+        file_info = dict(fullpath=fileref.path())
+    else:
+        file_info = server.file_finder(fileref, question=question)
+    if 'path' in file_info and 'extension' in file_info:
+        docassemble.base.filter.convert_svg_to_png(file_info)
+    if 'fullpath' not in file_info:
+        return '[FILE NOT FOUND]'
+    if width is not None:
+        m = re.search(r'^([0-9\.]+) *([A-Za-z]*)', str(width))
+        if m:
+            amount = float(m.group(1))
+            units = m.group(2).lower()
+            if units in ['in', 'inches', 'inch']:
+                the_width = Inches(amount)
+            elif units in ['pt', 'pts', 'point', 'points']:
+                the_width = Pt(amount)
+            elif units in ['mm', 'millimeter', 'millimeters']:
+                the_width = Mm(amount)
+            elif units in ['cm', 'centimeter', 'centimeters']:
+                the_width = Cm(amount)
+            elif units in ['twp', 'twip', 'twips']:
+                the_width = Twips(amount)
+            else:
+                the_width = Pt(amount)
+        else:
+            the_width = Inches(2)
+    else:
+        the_width = Inches(2)
+    return InlineImage(tpl, file_info['fullpath'], the_width)
+
+
 def h4docx(docx_file, header_image, header_text=None):
+
+    document = None
 
     # checking if file already present and creating it if not present
     if os.path.isfile(rf"{docx_file}"):
@@ -135,6 +221,8 @@ def h4docx(docx_file, header_image, header_text=None):
         if header_text is not None:
             ht1 = htab_cells[1].add_paragraph(header_text)
             ht1.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            # font size of header text
+            ht1.style.font.size = Pt(10)
 
             # saving the blank document
         document.save(docx_file)
@@ -160,9 +248,10 @@ def f4docx(docx_file, footer_image, footer_text=None):
         imgSize = Inches(4)
 
         if footer_text is not None:
-            imgSize = Inches(3)
+            imgSize = Inches(4.5)
             ft1 = ftab_cells[1].add_paragraph(footer_text)
             ft1.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ft1.style.font.size = Pt(10)
 
         fh.add_picture(footer_image, width=imgSize)
 
@@ -172,9 +261,17 @@ def f4docx(docx_file, footer_image, footer_text=None):
 def md2pdf(md_file: str) -> str:
 
     pdf_file = md_file.replace(".md", ".pdf")
-    cmdlet = f"pandoc \"{md_file}\" --pdf-engine=xelatex -o \"{pdf_file}\""
+    cmdlet = f"pandoc \"{md_file}\" -o \"{pdf_file}\""
     os.system(cmdlet)
     return pdf_file
+
+
+def md2epub(md_file: str) -> str:
+
+    epub_file = md_file.replace(".md", ".epub")
+    cmdlet = f"pandoc \"{md_file}\" -o \"{epub_file}\""
+    os.system(cmdlet)
+    return epub_file
 
 
 def update_all():
@@ -186,7 +283,12 @@ def update_all():
     if src_path == "":
         src = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
 
-    source_file_list = only4md(src_path, ".md")
+    notebook_file_list = only4ipynb(src_path)
+
+    for notebook_file in notebook_file_list:
+        md_file = ipynb2md(notebook_file)
+
+    source_file_list = only4md(src_path)
 
     pBarMax = len(source_file_list)
     widgets = [Percentage(),
@@ -197,6 +299,7 @@ def update_all():
 
     pBar.start()
     pBarCount = 0
+
     for source_file in source_file_list:
 
         docx_file = md2docx(source_file)
@@ -218,7 +321,7 @@ def update_all():
 class Handler(watchdog.events.PatternMatchingEventHandler):
     def __init__(self):
         # Set the patterns for PatternMatchingEventHandler
-        watchdog.events.PatternMatchingEventHandler.__init__(self, patterns=['*.md'],
+        watchdog.events.PatternMatchingEventHandler.__init__(self, patterns=['*.ipynb'],
                                                              ignore_directories=True, case_sensitive=False)
         print(sys.getdefaultencoding())
 
@@ -227,30 +330,54 @@ class Handler(watchdog.events.PatternMatchingEventHandler):
         # Event is created, you can process it now
 
     def on_modified(self, event):
-        docx_file = md2docx(event.src_path)
+        print(f"{event.src_path} is modified.")
+        # Event is modified, you can process it now
+
+        md_file = ipynb2md(event.src_path)
+
+        docx_file = md2docx(md_file)
         h4docx(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
             os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
         f4docx(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
             os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
-        pptx_file = md2pptx(event.src_path)
-        pdf_file = md2pdf(event.src_path)
+
+        pptx_file = md2pptx(md_file)
+        pdf_file = md2pdf(md_file)
 
     def on_deleted(self, event):
-        os.remove(event.src_path.replace(".md", "docx"))
-        os.remove(event.src_path.replace(".md", "pptx"))
-        os.remove(event.src_path.replace(".md", "pdf"))
+
+        print(f"{event.src_path} is deleted.")
+        # Event is deleted, you can process it now
+
+        md_file = event.src_path.replace(".ipynb", ".md")
+        os.remove(md_file)
+        os.remove(md_file.replace(".md", ".docx"))
+        os.remove(md_file.replace(".md", ".pptx"))
+        os.remove(md_file.replace(".md", ".pdf"))
 
 
 if __name__ == "__main__":
+    
+    # ask user if they want to update all files in the folder
+    
+    update_all_manually = input("Update all files in the folder? (y/n): ")
+    
+    if update_all_manually == "y":
+        update_all()
+        
+    # ask user if they want to watch the folder for changes
 
-    src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    event_handler = Handler()
-    observer = watchdog.observers.Observer()
-    observer.schedule(event_handler, path=src_path, recursive=True)
-    observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+    watch_folder = input("Watch folder for changes? (y/n): ")
+     
+    if watch_folder == "y":
+        src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+        event_handler = Handler()
+        observer = watchdog.observers.Observer()
+        observer.schedule(event_handler, path=src_path, recursive=True)
+        observer.start()
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()

@@ -1,7 +1,8 @@
 <center>
-    <img src='https://intecbrussel.be/img/logo3.png' width='400px' height='auto'/>
+    <img src='https://www.intecbrussel.be/img/logo3.png' width='400px' height='auto'/>
     <br/>
-    <em>Python les-materialen</em>
+    <em>Python les-materialen</em><br/>
+    <em> Yilmaz Mustafa, Instructeur Java/Python</em>
 </center>
 
 # Files (Bestanden)
