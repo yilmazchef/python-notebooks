@@ -20,46 +20,23 @@ from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
     SimpleProgress, Timer, UnknownLength
 
 
-def dir2json(path):
+def get_notebook_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Notebooks"))
 
-    import gitpython as git
+def get_markdown_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Markdowns"))
 
-    base = os.path.basename(path)
+def get_html_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Website"))
 
-    # read github repository name from .git/config
-    config = configparser.ConfigParser()
-    config.read(os.path.join(path, ".git/config"))
-    repo_name = config["remote \"origin\""]["url"].split(
-        "/")[-1].replace(".git", "")
-    username = config["remote \"origin\""]["url"].split("/")[-2]
+def get_docx_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Documents"))
 
-    git_info = {
-        "name": base,
-        "path": path,
-        "repo": repo_name,
-        "children": []
-    }
+def get_pptx_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Presentations"))
 
-    print(git_info)
-
-    d = {
-        'id': str(uuid4()),
-        'name': base
-    }
-    if os.path.isdir(path):
-        d['type'] = "directory"
-        d['child'] = [dir2json(os.path.join(path, x))
-                      for x in os.listdir(path)]
-    else:
-        pdf = f'https://raw.githubusercontent.com/{quote(base)}/{quote(repo_name)}/main/Notebooks/English/{quote(base)}'
-        md = f'https://raw.githubusercontent.com/{quote(username)}/{quote(repo_name)}/main/Notebooks/English/{quote(base.replace(".md", ".pdf"))}'
-
-        d['type'] = "file"
-        d['link'] = md,
-        d['download'] = pdf
-
-    return d
-
+def get_pdf_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "EBooks"))
 
 def dir2file(path):
     json_file = os.path.join(path, "index.json")

@@ -13,7 +13,7 @@ def invest(amount, rate, years):
 
 
 amount = float(input("Enter a principal amount: "))
-rate = float(input("Enter an anual rate of return: "))
+rate = float(input("Enter an annual rate of return: "))
 years = int(input("Enter a number of years: "))
 
 invest(amount, rate, years)

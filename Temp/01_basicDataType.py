@@ -328,7 +328,7 @@ s3="Python" # case sensitive
 # Assignment
 # 1) How a C program compiled?
 # 2) How to run C program using command line .
-# 3) C Program memory stucture..
+# 3) C Program memory structure..
 # 4) How to swap 2 variable using XOR OR AND operator bitwise
 # 5) how to run Java program using command line
 
