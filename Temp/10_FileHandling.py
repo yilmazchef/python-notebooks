@@ -45,7 +45,7 @@
 # * 'a+' - appending and reading mode. Similar to w+ as it will create a new file if the file does not exist.
 # Otherwise, the file pointer is at the end of the file if it exists.
 # * 'ab+' - appending and reading mode in binary. The same as a+ except that the data is in binary.
-<filePointerVariable>=open(<fileName>,<mode>)
+# <filePointerVariable>=open(<fileName>,<mode>)
 # In[ ]:
 
 
@@ -400,18 +400,18 @@ fc.seek(-2,2)
 print(fc.tell())
 # help(fc)
 
-seek(self, target, whence=0, /)
- |      Change stream position.
- |      
- |      Change the stream position to the given byte offset. The offset is
- |      interpreted relative to the position indicated by whence.  Values
- |      for whence are:
- |      
- |      * 0 -- start of stream (the default); offset should be zero or positive
- |      * 1 -- current stream position; offset may be negative
- |      * 2 -- end of stream; offset is usually negative
- |      
- |      Return the new absolute position.
+# seek(self, target, whence=0, /)
+#  |      Change stream position.
+#  |      
+#  |      Change the stream position to the given byte offset. The offset is
+#  |      interpreted relative to the position indicated by whence.  Values
+#  |      for whence are:
+#  |      
+#  |      * 0 -- start of stream (the default); offset should be zero or positive
+#  |      * 1 -- current stream position; offset may be negative
+#  |      * 2 -- end of stream; offset is usually negative
+#  |      
+#  |      Return the new absolute position.
 # In[ ]:
 
 
@@ -508,14 +508,14 @@ shutil.copytree(source, destination)
 # In[ ]:
 
 
-1.
+# 1.
 def file_read(fname):
         txt = open(fname)
         print(txt.read())
 
 file_read('test.txt')
 
-2.
+# 2.
 def file_read_from_head(fname, nlines):
         from itertools import islice
         with open(fname) as f:
@@ -523,7 +523,7 @@ def file_read_from_head(fname, nlines):
                         print(line)
 file_read_from_head('test.txt',2)
 
-3.
+# 3.
 def file_read(fname):
         from itertools import islice
         with open(fname, "w") as myfile:
@@ -533,7 +533,7 @@ def file_read(fname):
         print(txt.read())
 file_read('abc.txt')
 
-4.
+# 4.
 import sys
 import os
 def file_read_from_tail(fname,lines):
@@ -554,24 +554,23 @@ def file_read_from_tail(fname,lines):
 
 file_read_from_tail('test.txt',2)
 
-5.
+# 5.
 def file_read(fname):
         with open(fname) as f:
                 #Content_list is the list that contains the read lines.     
                 content_list = f.readlines()
                 print(content_list)
 
-file_read(\'test.txt\')
+file_read('test.txt')
 
-6.
+# 6.
 def file_read(fname):
         with open (fname, "r") as myfile:
                 data=myfile.readlines()
                 print(data)
 file_read('test.txt')
 
-7.
-
+# 7.
 def file_read(fname):
         content_array = []
         with open(fname) as f:
@@ -582,7 +581,7 @@ def file_read(fname):
 
 file_read('test.txt')
 
-8.
+# 8.
 def longest_word(filename):
     with open(filename, 'r') as infile:
               words = infile.read().split()
@@ -591,7 +590,7 @@ def longest_word(filename):
 
 print(longest_word('test.txt'))
 
-9.
+# 9.
 def file_lengthy(fname):
         with open(fname) as f:
                 for i, l in enumerate(f):
@@ -599,7 +598,7 @@ def file_lengthy(fname):
         return i + 1
 print("Number of lines in the file: ",file_lengthy("test.txt"))
 
-10.
+# 10.
 from collections import Counter
 def word_count(fname):
         with open(fname) as f:
@@ -607,7 +606,7 @@ def word_count(fname):
 
 print("Number of words in the file :",word_count("test.txt"))
 
-11.
+# 11.
 def file_size(fname):
         import os
         statinfo = os.stat(fname)
@@ -615,7 +614,7 @@ def file_size(fname):
 
 print("File size in bytes of a plain file: ",file_size("test.txt"))
 
-12.
+# 12.
 color = ['Red', 'Green', 'White', 'Black', 'Pink', 'Yellow']
 with open('abc.txt', "w") as myfile:
         for c in color:
@@ -624,31 +623,31 @@ with open('abc.txt', "w") as myfile:
 content = open('abc.txt')
 print(content.read())
 
-13.
+# 13.
 from shutil import copyfile
 copyfile('test.py', 'abc.py')
 
-14.
+# 14.
 with open('abc.txt') as fh1, open('test.txt') as fh2:
     for line1, line2 in zip(fh1, fh2):
         # line1 from abc.txt, line2 from test.txtg
         print(line1+line2)
 		
 
-15.
+# 15.
 import random
 def random_line(fname):
     lines = open(fname).read().splitlines()
     return random.choice(lines)
 print(random_line('test.txt'))
 
-16.
+# 16.
 f = open('abc.txt','r')
 print(f.closed)
 f.close()
 print(f.closed)
 
-17.
+# 17.
 def remove_newlines(fname):
     flist = open(fname).readlines()
     return [s.rstrip('\n') for s in flist]
