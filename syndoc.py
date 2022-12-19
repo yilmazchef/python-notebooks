@@ -101,6 +101,19 @@ def notebook_to_markdown(ipynb_file: str) -> str:
     # return the path to the markdown file
     return ipynb_file.replace(".ipynb", ".md")
 
+def notebook_to_python_script(ipynb_file: str) -> str:
+    """
+    Converts an ipynb file to a python script
+    @param ipynb_file: the path to the ipynb file
+    @return: the path to the python script
+    """
+    # create the command to convert the ipynb file to python script
+    cmdlet = f"jupyter nbconvert --to script \"{ipynb_file}\""
+    # run the command using the os module function system() but do not print the output
+    os.system(cmdlet)
+    # return the path to the python script
+    return ipynb_file.replace(".ipynb", ".py")
+
 
 def markdown_to_notebook(md_file: str) -> str:
     """_summary_
@@ -286,6 +299,12 @@ def update_all():
         
         # move the converted file to the corresponding folder
         md_file = move_file(md_file, "MDs")
+        
+        # convert to py script
+        py_file = notebook_to_python_script(notebook_file)
+        
+        # move the converted file to the corresponding folder
+        py_file = move_file(py_file, "Scripts")
         
         pBarCount += 1
         pBar.update(pBarCount)
