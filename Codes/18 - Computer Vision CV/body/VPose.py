@@ -14,7 +14,7 @@ class PoseDetector:
     """
 
     def __init__(self, mode=False, smooth=True,
-                 detectionCon=0.5, trackCon=0.5):
+        detectionCon=0.5, trackCon=0.5):
         """
         :param mode: In static mode, detection is done on each image: slower
         :param upBody: Upper boy only flag
@@ -31,9 +31,9 @@ class PoseDetector:
         self.mpDraw = mp.solutions.drawing_utils
         self.mpPose = mp.solutions.pose
         self.pose = self.mpPose.Pose(static_image_mode=self.mode,
-                                     smooth_landmarks=self.smooth,
-                                     min_detection_confidence=self.detectionCon,
-                                     min_tracking_confidence=self.trackCon)
+        smooth_landmarks=self.smooth,
+        min_detection_confidence=self.detectionCon,
+        min_tracking_confidence=self.trackCon)
 
     def findPose(self, img, draw=True):
         """
@@ -46,8 +46,7 @@ class PoseDetector:
         self.results = self.pose.process(imgRGB)
         if self.results.pose_landmarks:
             if draw:
-                self.mpDraw.draw_landmarks(img, self.results.pose_landmarks,
-                                           self.mpPose.POSE_CONNECTIONS)
+                self.mpDraw.draw_landmarks(img, self.results.pose_landmarks, self.mpPose.POSE_CONNECTIONS)
         return img
 
     def findPosition(self, img, draw=True, bboxWithHands=False):
@@ -100,8 +99,7 @@ class PoseDetector:
         x3, y3 = self.lmList[p3][1:]
 
         # Calculate the Angle
-        angle = math.degrees(math.atan2(y3 - y2, x3 - x2) -
-                             math.atan2(y1 - y2, x1 - x2))
+        angle = math.degrees(math.atan2(y3 - y2, x3 - x2) - math.atan2(y1 - y2, x1 - x2))
         if angle < 0:
             angle += 360
 

@@ -1,0 +1,10 @@
+pyautogui
+flask
+pypdf2
+openpyxl
+cvzone
+mediapipe
+numpy
+pandas
+matplotlib
+seaborn

@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import shutil as sh
 import watchdog.events
 import watchdog.observers
 
@@ -18,56 +19,38 @@ from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
     AdaptiveETA, FileTransferSpeed, FormatLabel, Percentage, \
     ProgressBar, ReverseBar, RotatingMarker, \
     SimpleProgress, Timer, UnknownLength
+    
+
+def scrape_webite_in_markdown(url: str, output_file: str) -> str:
+    """Scrapes a website and saves it as a markdown file
+
+    Args:
+        url (str): the url of the website
+        output_file (str): the path to the markdown file
+
+    Returns:
+        str: the path to the markdown file
+    """
+    cmdlet = f"wget -O \"{output_file}\" \"{url}\""
+    os.system(cmdlet)
+    return output_file
+
+def html_to_markdown(html_file: str) -> str:
+    """Converts an html file to a markdown file
+
+    Args:
+        html_file (str): the path to the html file
+
+    Returns:
+        str: the path to the markdown file
+    """
+    output_file = html_file.replace(".html", ".md")
+    cmdlet = f"pandoc -f html -t markdown \"{html_file}\" -o \"{output_file}\""
+    os.system(cmdlet)
+    return output_file
 
 
-def get_notebook_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Notebooks"))
-
-def get_markdown_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Markdowns"))
-
-def get_html_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Website"))
-
-def get_docx_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Documents"))
-
-def get_pptx_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Presentations"))
-
-def get_pdf_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "EBooks"))
-
-def dir2file(path):
-    json_file = os.path.join(path, "index.json")
-
-    with open(json_file, "w") as f:
-        json.dump(dir2json(path), f, indent=4)
-
-    return json_file
-
-
-def only4md(folder_path: str) -> list:
-    paths = []
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.lower().endswith(".md"):
-                paths.append(os.path.join(root, file))
-
-    return paths
-
-
-def only4ipynb(folder_path: str) -> list:
-    paths = []
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.lower().endswith(".ipynb"):
-                paths.append(os.path.join(root, file))
-
-    return paths
-
-
-def md2html(md_file: str) -> str:
+def markdown_to_html(md_file: str) -> str:
 
     html_file = md_file.replace(".md", ".html")
     cmdlet = f"pandoc -o \"{html_file}\" \"{md_file}\""
@@ -75,7 +58,7 @@ def md2html(md_file: str) -> str:
     return html_file
 
 
-def img2base64(image_file, output_file):
+def image_to_base64(image_file):
 
     # need base 64
     import base64
@@ -99,31 +82,56 @@ def img2base64(image_file, output_file):
     # add the image tags
     image_string = '<p><img src="data:image/png;base64,' + image_string + '"></p>'
     # write it out
+    output_file = image_file.replace(".png", ".html")
+    
     image_result = open(output_file, 'w')
     image_result.write(image_string)
 
 
-def ipynb2md(ipynb_file: str) -> str:
+def notebook_to_markdown(ipynb_file: str) -> str:
+    """
+    Converts an ipynb file to a markdown file
+    @param ipynb_file: the path to the ipynb file
+    @return: the path to the markdown file
+    """
+    # create the command to convert the ipynb file to markdown
     cmdlet = f"jupyter nbconvert --to markdown \"{ipynb_file}\""
+    # run the command using the os module function system() but do not print the output
     os.system(cmdlet)
+    # return the path to the markdown file
     return ipynb_file.replace(".ipynb", ".md")
 
 
-def md2ipynb(md_file: str) -> str:
+def markdown_to_notebook(md_file: str) -> str:
+    """_summary_
 
+    Args:
+        md_file (str): _description_
+
+    Returns:
+        str: _description_
+    """
     ipynb_file = md_file.replace(".md", ".ipynb")
     cmdlet = f"pandoc \"{md_file}\" -o \"{ipynb_file}\""
     os.system(cmdlet)
     return ipynb_file
 
 
-def md2odt(md_file):
-    odt_file = md_file.replace(".md", "odt")
-    cmdlet = f"pandoc -t odt \"{md_file}\" -o \"{odt_file}\""
+def markdown_to_open_document(md_file):
+    """
+    Converts a markdown file to an open document file
+    @param md_file: the path to the markdown file
+    @return: the path to the open document file
+    """
+    # create the command to convert the markdown file to open document
+    cmdlet = f"pandoc \"{md_file}\" -o \"{md_file.replace('.md', '.odt')}\""
+    # run the command using the os module function system() but do not print the output
     os.system(cmdlet)
+    # return the path to the open document file
+    return md_file.replace(".md", ".odt")
 
 
-def md2pptx(md_file: str) -> str:
+def markdown_to_powerpoint(md_file: str) -> str:
 
     c = collections
     c.abc = collections.abc
@@ -135,7 +143,7 @@ def md2pptx(md_file: str) -> str:
     return pptx_path
 
 
-def md2docx(md_file: str) -> str:
+def markdown_to_word_document(md_file: str) -> str:
 
     docx_file = md_file.replace(".md", ".docx")
     cmdlet = f"pandoc \"{md_file}\" -f markdown -o \"{docx_file}\""
@@ -177,7 +185,7 @@ def img4docx(fileref, question, tpl, width=None):
     return InlineImage(tpl, file_info['fullpath'], the_width)
 
 
-def h4docx(docx_file, header_image, header_text=None):
+def add_header_to_word_document(docx_file, header_image, header_text=None):
 
     document = None
 
@@ -205,7 +213,7 @@ def h4docx(docx_file, header_image, header_text=None):
         document.save(docx_file)
 
 
-def f4docx(docx_file, footer_image, footer_text=None):
+def add_footer_to_word_document(docx_file, footer_image, footer_text=None):
 
     document = None
 
@@ -235,7 +243,7 @@ def f4docx(docx_file, footer_image, footer_text=None):
         document.save(docx_file)
 
 
-def md2pdf(md_file: str) -> str:
+def markdown_to_pdf(md_file: str) -> str:
 
     pdf_file = md_file.replace(".md", ".pdf")
     cmdlet = f"pandoc \"{md_file}\" -o \"{pdf_file}\""
@@ -243,7 +251,7 @@ def md2pdf(md_file: str) -> str:
     return pdf_file
 
 
-def md2epub(md_file: str) -> str:
+def markdown_to_ebook(md_file: str) -> str:
 
     epub_file = md_file.replace(".md", ".epub")
     cmdlet = f"pandoc \"{md_file}\" -o \"{epub_file}\""
@@ -260,12 +268,31 @@ def update_all():
     if src_path == "":
         src = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
 
-    notebook_file_list = only4ipynb(src_path)
+    notebook_file_list = get_files(src_path, ".ipynb")
+
+    pBarMax = len(notebook_file_list)
+    widgets = [Percentage(),
+               ' ', Bar(),
+               ' ', ETA(),
+               ' ', AdaptiveETA()]
+    pBar = ProgressBar(widgets=widgets, maxval=pBarMax)
+
+    pBar.start()
+    pBarCount = 0
 
     for notebook_file in notebook_file_list:
-        md_file = ipynb2md(notebook_file)
+        # converting to md
+        md_file = notebook_to_markdown(notebook_file)
+        
+        # move the converted file to the corresponding folder
+        md_file = move_file(md_file, "MDs")
+        
+        pBarCount += 1
+        pBar.update(pBarCount)
 
-    source_file_list = only4md(src_path)
+    pBar.finish()
+
+    source_file_list = get_files(os.path.join(os.getcwd(), "MDs"), ".md")
 
     pBarMax = len(source_file_list)
     widgets = [Percentage(),
@@ -279,15 +306,33 @@ def update_all():
 
     for source_file in source_file_list:
 
-        docx_file = md2docx(source_file)
-        h4docx(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
+        # converting to docx
+        docx_file = markdown_to_word_document(source_file)
+        add_header_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
             os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
-        f4docx(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
+        add_footer_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
             os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
+        
+        # move the converted files to the respective folders
+        docx_file = move_file(docx_file, "DOCs")
 
-        pptx_file = md2pptx(source_file)
-
-        pdf_file = md2pdf(source_file)
+        # converting to powerpoint
+        pptx_file = markdown_to_powerpoint(source_file)
+        
+        # move the converted files to the respective folders
+        pptx_file = move_file(pptx_file, "PPTs")
+        
+        # converting to pdf
+        pdf_file = markdown_to_pdf(source_file)
+        
+        # move the converted files to the respective folders
+        pdf_file = move_file(pdf_file, "PDFs")
+        
+        # converting to odt
+        odt_file = markdown_to_open_document(source_file)
+        
+        # move the converted files to the respective folders
+        odt_file = move_file(odt_file, "ODTs")
 
         pBarCount += 1
         pBar.update(pBarCount)
@@ -295,66 +340,29 @@ def update_all():
     pBar.finish()
 
 
-class Handler(watchdog.events.PatternMatchingEventHandler):
-    def __init__(self):
-        # Set the patterns for PatternMatchingEventHandler
-        watchdog.events.PatternMatchingEventHandler.__init__(self, patterns=['*.ipynb'],
-                                                             ignore_directories=True, case_sensitive=False)
-        print(sys.getdefaultencoding())
+def get_files(src_path: str, file_ext: str) -> list:
 
-    def on_created(self, event):
-        print(f"{event.src_path} is created.")
-        # Event is created, you can process it now
+    source_file_list = []
 
-    def on_modified(self, event):
-        print(f"{event.src_path} is modified.")
-        # Event is modified, you can process it now
+    for root, dirs, files in os.walk(src_path):
+        for file in files:
+            if file.endswith(file_ext):
+                source_file_list.append(os.path.join(root, file))
 
-        md_file = ipynb2md(event.src_path)
+    return source_file_list
 
-        docx_file = md2docx(md_file)
-        h4docx(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
-            os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
-        f4docx(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
-            os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
 
-        pptx_file = md2pptx(md_file)
-        pdf_file = md2pdf(md_file)
+def move_file(file_path: str, dest_folder: str):
 
-    def on_deleted(self, event):
+    if not os.path.exists(dest_folder):
+        os.mkdir(dest_folder)
 
-        print(f"{event.src_path} is deleted.")
-        # Event is deleted, you can process it now
-
-        md_file = event.src_path.replace(".ipynb", ".md")
-        os.remove(md_file)
-        os.remove(md_file.replace(".md", ".docx"))
-        os.remove(md_file.replace(".md", ".pptx"))
-        os.remove(md_file.replace(".md", ".pdf"))
-
+    if(os.path.exists(os.path.join(dest_folder, os.path.basename(file_path)))):
+        os.remove(os.path.join(dest_folder, os.path.basename(file_path)))
+    
+    sh.move(file_path, dest_folder)
+    
+    return os.path.join(dest_folder, os.path.basename(file_path))
 
 if __name__ == "__main__":
-    
-    # ask user if they want to update all files in the folder
-    
-    update_all_manually = input("Update all files in the folder? (y/n): ")
-    
-    if update_all_manually == "y":
-        update_all()
-        
-    # ask user if they want to watch the folder for changes
-
-    watch_folder = input("Watch folder for changes? (y/n): ")
-     
-    if watch_folder == "y":
-        src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-        event_handler = Handler()
-        observer = watchdog.observers.Observer()
-        observer.schedule(event_handler, path=src_path, recursive=True)
-        observer.start()
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            observer.stop()
-        observer.join()
+    update_all()
