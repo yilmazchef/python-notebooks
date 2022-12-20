@@ -297,14 +297,32 @@ def update_all():
         # converting to md
         md_file = notebook_to_markdown(notebook_file)
         
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(md_file))
+        
         # move the converted file to the corresponding folder
-        md_file = move_file(md_file, "MDs")
+        target_folder = os.path.join(os.getcwd(), "MDs", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+        
+        md_file = move_file(md_file, target_folder)
         
         # convert to py script
         py_file = notebook_to_python_script(notebook_file)
         
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(py_file))
+        
         # move the converted file to the corresponding folder
-        py_file = move_file(py_file, "Scripts")
+        target_folder = os.path.join(os.getcwd(), "Scripts", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+        
+        py_file = move_file(py_file, target_folder)
         
         pBarCount += 1
         pBar.update(pBarCount)
@@ -325,6 +343,8 @@ def update_all():
 
     for source_file in source_file_list:
 
+        # ----------------- Converting to DOCX -----------------
+
         # converting to docx
         docx_file = markdown_to_word_document(source_file)
         add_header_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
@@ -334,24 +354,74 @@ def update_all():
         
         # move the converted files to the respective folders
         docx_file = move_file(docx_file, "DOCs")
+        
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(docx_file))
+        
+        # move the converted file to the corresponding folder
+        target_folder = os.path.join(os.getcwd(), "DOCs", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+            
+        docx_file = move_file(docx_file, target_folder)
+        
+        # ----------------- Converting to PPTX -----------------
 
         # converting to powerpoint
         pptx_file = markdown_to_powerpoint(source_file)
         
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(pptx_file))
+        
+        # move the converted file to the corresponding folder
+        target_folder = os.path.join(os.getcwd(), "PPTs", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+        
         # move the converted files to the respective folders
-        pptx_file = move_file(pptx_file, "PPTs")
+        pptx_file = move_file(pptx_file, target_folder)
+        
+        # ----------------- Converting to PDF -----------------
         
         # converting to pdf
         pdf_file = markdown_to_pdf(source_file)
         
-        # move the converted files to the respective folders
-        pdf_file = move_file(pdf_file, "PDFs")
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(pdf_file))
         
+        # move the converted file to the corresponding folder
+        target_folder = os.path.join(os.getcwd(), "PDFs", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+        
+        # move the converted files to the respective folders
+        pdf_file = move_file(pdf_file, target_folder)
+        
+        # ----------------- Converting to ODT -----------------
+
         # converting to odt
         odt_file = markdown_to_open_document(source_file)
         
+        # get the parent folder name
+        parent_folder = os.path.basename(os.path.dirname(odt_file))
+        
+        # move the converted file to the corresponding folder
+        target_folder = os.path.join(os.getcwd(), "ODTs", parent_folder)
+        
+        # if the folder does not exist, create it
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder)
+        
         # move the converted files to the respective folders
-        odt_file = move_file(odt_file, "ODTs")
+        odt_file = move_file(odt_file, target_folder)
+
+        # ----------------- Incrementing the value of the progress bar -----------------
 
         pBarCount += 1
         pBar.update(pBarCount)
