@@ -144,6 +144,9 @@ def markdown_to_open_document(md_file):
     return md_file.replace(".md", ".odt")
 
 
+def notebook_to_powerpoint(ipynb_file: str) -> str:
+    pass
+
 def markdown_to_powerpoint(md_file: str) -> str:
 
     c = collections
@@ -351,9 +354,6 @@ def update_all():
             os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
         add_footer_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
             os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
-        
-        # move the converted files to the respective folders
-        docx_file = move_file(docx_file, "DOCs")
         
         # get the parent folder name
         parent_folder = os.path.basename(os.path.dirname(docx_file))

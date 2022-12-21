@@ -1,0 +1,72 @@
+# ATM app 
+
+import time as t
+
+balance = 1000.00
+logs = dict()
+
+# 1. Maak een functie die de pincode van de gebruiker vraagt 
+#    en checkt of deze gelijk is aan 1234. als het niet correct is, 
+#    blijf om maximaal 3 keer te vragen totdat de gebruikersinvoer correct is. 
+
+def check_pin(pincode):
+    pass
+
+
+# 2. Als de pincode correct is, vraag dan de gebruiker om een bedrag op te nemen.
+#    Als het bedrag groter is dan de balance, geef dan een foutmelding.
+#    Blijf verder om te vragen totdat juiste amount is gegeven (bvb. 250, 500, maar niet -100, 1400, enz.)
+
+def withdraw(amount):
+    pass
+
+# 3. Als het bedrag kleiner is dan de 'balance', 
+# vraag dan als de geburiker wilt 'withdrawal' aanvaarden of niet.
+# (op een andere manier, als de gebruiker zeker is om verder te gaan of niet)
+
+def validate(are_you_sure):
+    pass
+
+# 4. Als de gebruiker validate bevestigt,
+#    geef dan het bedrag uit en geef een melding dat het geld is uitgegeven.
+
+def give_money(amount):
+    pass
+
+# 5. Als de gebruiker validate niet bevestigt,
+#    geef dan een foutmelding en vraag de gebruiker om het bedrag opnieuw in te voeren.
+
+def ask_to_try_again(amount):
+    pass
+
+
+def warn_to_try_again():
+    message = "Please enter a valid option to withdraw: 'y' for yes, 'n' for no."
+    print(message)
+    logs[t.time_ns, message]
+    
+def ask_to_confirm_withdrawal(amount):
+    message = "Please confirm that you would like to withdraw {0}: y/n".format(amount)
+    logs[t.time_ns, message]
+    return input(message)
+    
+def warn_that_withdraw_cancelled():
+    message = "Withdrawal request is cancelled."
+    logs[t.time_ns, message]
+    print(message)
+    
+def inform_withdraw_in_progress(amount):
+    message = "Withdrawal of {0} is in progress..".format(amount)
+    print(message)
+    logs[t.time_ns, message]
+
+def warn_cannot_withdraw_negative_amount():
+    message = "Please enter a POSITIVE value (an amount grater than zero)."
+    print(message)
+    logs[t.time_ns, message]
+    
+def warn_cannot_withdraw_more_than_balance():
+    message = "You can NOT withdraw more than {}.".format(balance) 
+    print(message)
+    logs[t.time_ns, message]
+
