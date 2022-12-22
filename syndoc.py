@@ -21,7 +21,7 @@ from progressbar import AnimatedMarker, Bar, BouncingBar, Counter, ETA, \
     SimpleProgress, Timer, UnknownLength
     
 
-def scrape_webite_in_markdown(url: str, output_file: str) -> str:
+def scrape_website_in_markdown(url: str, output_file: str) -> str:
     """Scrapes a website and saves it as a markdown file
 
     Args:
@@ -35,6 +35,30 @@ def scrape_webite_in_markdown(url: str, output_file: str) -> str:
     os.system(cmdlet)
     return output_file
 
+def get_files(src_path: str, file_ext: str) -> list:
+
+    source_file_list = []
+
+    for root, dirs, files in os.walk(src_path):
+        for file in files:
+            if file.endswith(file_ext):
+                source_file_list.append(os.path.join(root, file))
+
+    return source_file_list
+
+
+def move_file(file_path: str, dest_folder: str):
+
+    if not os.path.exists(dest_folder):
+        os.mkdir(dest_folder)
+
+    if(os.path.exists(os.path.join(dest_folder, os.path.basename(file_path)))):
+        os.remove(os.path.join(dest_folder, os.path.basename(file_path)))
+    
+    sh.move(file_path, dest_folder)
+    
+    return os.path.join(dest_folder, os.path.basename(file_path))
+
 def html_to_markdown(html_file: str) -> str:
     """Converts an html file to a markdown file
 
@@ -46,7 +70,21 @@ def html_to_markdown(html_file: str) -> str:
     """
     output_file = html_file.replace(".html", ".md")
     cmdlet = f"pandoc -f html -t markdown \"{html_file}\" -o \"{output_file}\""
+    
     os.system(cmdlet)
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(html_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "MDs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    md_file = move_file(md_file, target_folder)
+    
     return output_file
 
 
@@ -55,6 +93,19 @@ def markdown_to_html(md_file: str) -> str:
     html_file = md_file.replace(".md", ".html")
     cmdlet = f"pandoc -o \"{html_file}\" \"{md_file}\""
     os.system(cmdlet)
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "HTMLs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+        
+    html_file = move_file(html_file, target_folder)
+    
     return html_file
 
 
@@ -94,12 +145,28 @@ def notebook_to_markdown(ipynb_file: str) -> str:
     @param ipynb_file: the path to the ipynb file
     @return: the path to the markdown file
     """
+    
+    md_temp_file = ipynb_file.replace(".ipynb", ".md")
     # create the command to convert the ipynb file to markdown
     cmdlet = f"jupyter nbconvert --to markdown \"{ipynb_file}\""
     # run the command using the os module function system() but do not print the output
     os.system(cmdlet)
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(ipynb_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "MDs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    if(os.path.exists(md_temp_file)):
+        md_file = move_file(md_temp_file, target_folder)
+    
     # return the path to the markdown file
-    return ipynb_file.replace(".ipynb", ".md")
+    return md_file
 
 def notebook_to_python_script(ipynb_file: str) -> str:
     """
@@ -107,12 +174,29 @@ def notebook_to_python_script(ipynb_file: str) -> str:
     @param ipynb_file: the path to the ipynb file
     @return: the path to the python script
     """
+    
+    py_temp_file = ipynb_file.replace(".ipynb", ".py")
+    
     # create the command to convert the ipynb file to python script
     cmdlet = f"jupyter nbconvert --to script \"{ipynb_file}\""
     # run the command using the os module function system() but do not print the output
     os.system(cmdlet)
+    
+    # get the parent folder name    
+    parent_folder = os.path.basename(os.path.dirname(ipynb_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "Scripts", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    if(os.path.exists(py_temp_file)):
+        py_file = move_file(py_temp_file, target_folder)
+    
     # return the path to the python script
-    return ipynb_file.replace(".ipynb", ".py")
+    return py_file
 
 
 def markdown_to_notebook(md_file: str) -> str:
@@ -126,11 +210,25 @@ def markdown_to_notebook(md_file: str) -> str:
     """
     ipynb_file = md_file.replace(".md", ".ipynb")
     cmdlet = f"pandoc \"{md_file}\" -o \"{ipynb_file}\""
+    
     os.system(cmdlet)
+    
+    # get the parent folder name    
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "Notebooks", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    ipynb_file = move_file(md_file.replace(".md", ".ipynb"), target_folder)
+    
     return ipynb_file
 
 
-def markdown_to_open_document(md_file):
+def markdown_to_open_document(md_file: str):
     """
     Converts a markdown file to an open document file
     @param md_file: the path to the markdown file
@@ -140,37 +238,76 @@ def markdown_to_open_document(md_file):
     cmdlet = f"pandoc \"{md_file}\" -o \"{md_file.replace('.md', '.odt')}\""
     # run the command using the os module function system() but do not print the output
     os.system(cmdlet)
+    
+    # get the parent folder name    
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "ODTs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    odt_file = move_file(md_file.replace(".ipynb", ".odt"), target_folder)
+    
     # return the path to the open document file
-    return md_file.replace(".md", ".odt")
+    return odt_file
 
-
-def notebook_to_powerpoint(ipynb_file: str) -> str:
-    
-    
-    
-    pass
 
 def markdown_to_powerpoint(md_file: str) -> str:
 
     c = collections
     c.abc = collections.abc
 
-    pptx_path = md_file.replace(".md", ".pptx")
-    cmdlet = f"pandoc -V fontsize=12pt \"{md_file}\" -s --wrap auto -o \"{pptx_path}\""
+    cmdlet = f"pandoc -V fontsize=12pt \"{md_file}\" -s --wrap auto -o \"{md_file.replace('.md', '.pptx')}\""
+    
     os.system(cmdlet)
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "PPTs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    # move the converted files to the respective folders
+    pptx_file = move_file(md_file.replace(".md", ".pptx"), target_folder)
 
-    return pptx_path
+    return pptx_file
 
 
 def markdown_to_word_document(md_file: str) -> str:
 
-    docx_file = md_file.replace(".md", ".docx")
-    cmdlet = f"pandoc \"{md_file}\" -f markdown -o \"{docx_file}\""
+    docx_temp_file = md_file.replace(".md", ".docx")
+    cmdlet = f"pandoc \"{md_file}\" -f markdown -o \"{docx_temp_file}\""
     os.system(cmdlet)
+    
+    add_header_to_word_document(docx_temp_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
+        os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
+    add_footer_to_word_document(docx_temp_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
+        os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "DOCs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+        
+    if(os.path.exists(docx_temp_file)):
+        docx_file = move_file(docx_file, target_folder)
+    
     return docx_file
 
 
-def img4docx(fileref, question, tpl, width=None):
+def add_image_to_word_document(fileref, question, tpl, width=None):
 
     if fileref.__class__.__name__ in ('DAFile', 'DAFileList', 'DAFileCollection', 'DALocalFile', 'DAStaticFile'):
         file_info = dict(fullpath=fileref.path())
@@ -228,7 +365,7 @@ def add_header_to_word_document(docx_file, header_image, header_text=None):
             # font size of header text
             ht1.style.font.size = Pt(10)
 
-        # saving the blank document
+            # saving the blank document
         document.save(docx_file)
 
 
@@ -267,6 +404,20 @@ def markdown_to_pdf(md_file: str) -> str:
     pdf_file = md_file.replace(".md", ".pdf")
     cmdlet = f"pandoc \"{md_file}\" -o \"{pdf_file}\""
     os.system(cmdlet)
+    
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "PDFs", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    # move the converted files to the respective folders
+    pdf_file = move_file(md_file.replace(".md", ".pdf"), target_folder)
+    
     return pdf_file
 
 
@@ -275,154 +426,66 @@ def markdown_to_ebook(md_file: str) -> str:
     epub_file = md_file.replace(".md", ".epub")
     cmdlet = f"pandoc \"{md_file}\" -o \"{epub_file}\""
     os.system(cmdlet)
+
+    # get the parent folder name
+    parent_folder = os.path.basename(os.path.dirname(md_file))
+    
+    # move the converted file to the corresponding folder
+    target_folder = os.path.join(os.getcwd(), ".synced", "eBooks", parent_folder)
+    
+    # if the folder does not exist, create it
+    if not os.path.exists(target_folder):
+        os.makedirs(target_folder)
+    
+    # move the converted files to the respective folders
+    epub_file = move_file(md_file.replace(".md", ".epub"), target_folder)    
+
     return epub_file
+
+
+def reset_progress_bar(max_value: int):
+    widgets = [Percentage(),
+               ' ', Bar(),
+               ' ', ETA(),
+               ' ', AdaptiveETA()]
+    return ProgressBar(widgets=widgets, maxval=max_value)
 
 
 def update_all():
 
-    src_path = input(
-        "Source folder: "
-    )
-
-    if src_path == "":
-        src = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-
+    src_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     notebook_file_list = get_files(src_path, ".ipynb")
-
-    pBarMax = len(notebook_file_list)
-    widgets = [Percentage(),
-               ' ', Bar(),
-               ' ', ETA(),
-               ' ', AdaptiveETA()]
-    pBar = ProgressBar(widgets=widgets, maxval=pBarMax)
-
+    
+    pBar = reset_progress_bar(len(notebook_file_list))
     pBar.start()
     pBarCount = 0
 
     for notebook_file in notebook_file_list:
-        
-        # converting to md
-        md_file = notebook_to_markdown(notebook_file)
-        
-        # get the parent folder name
-        parent_folder = os.path.basename(os.path.dirname(md_file))
-        
-        # move the converted file to the corresponding folder
-        target_folder = os.path.join(os.getcwd(), "MDs", parent_folder)
-        
-        # if the folder does not exist, create it
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
-        
-        md_file = move_file(md_file, target_folder)
+        notebook_to_markdown(notebook_file)
+        notebook_to_python_script(notebook_file)
         
         pBarCount += 1
         pBar.update(pBarCount)
 
     pBar.finish()
 
-    source_file_list = get_files(os.path.join(os.getcwd(), "MDs"), ".md")
+    source_file_list = get_files(os.path.join(os.getcwd(), ".synced", "MDs"), ".md")
 
-    pBarMax = len(source_file_list)
-    widgets = [Percentage(),
-               ' ', Bar(),
-               ' ', ETA(),
-               ' ', AdaptiveETA()]
-    pBar = ProgressBar(widgets=widgets, maxval=pBarMax)
-
+    pBar = reset_progress_bar(len(source_file_list))
     pBar.start()
     pBarCount = 0
 
     for source_file in source_file_list:
-
-        # ----------------- Converting to DOCX -----------------
-
-        # converting to docx
-        docx_file = markdown_to_word_document(source_file)
-        add_header_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "header.png"), open(
-            os.path.join(os.getcwd(), "templates", "header.txt"), 'r'))
-        add_footer_to_word_document(docx_file, os.path.join(os.getcwd(), "Templates", "footer.png"), open(
-            os.path.join(os.getcwd(), "templates", "footer.txt"), 'r'))
         
-        # get the parent folder name
-        parent_folder = os.path.basename(os.path.dirname(docx_file))
-        
-        # move the converted file to the corresponding folder
-        target_folder = os.path.join(os.getcwd(), "DOCs", parent_folder)
-        
-        # if the folder does not exist, create it
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
-            
-        docx_file = move_file(docx_file, target_folder)
-        
-        # ----------------- Converting to PPTX -----------------
-
-        # converting to powerpoint
-        pptx_file = markdown_to_powerpoint(source_file)
-        
-        # get the parent folder name
-        parent_folder = os.path.basename(os.path.dirname(pptx_file))
-        
-        # move the converted file to the corresponding folder
-        target_folder = os.path.join(os.getcwd(), "PPTs", parent_folder)
-        
-        # if the folder does not exist, create it
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
-        
-        # move the converted files to the respective folders
-        pptx_file = move_file(pptx_file, target_folder)
-        
-        # ----------------- Converting to PDF -----------------
-        
-        # converting to pdf
-        pdf_file = markdown_to_pdf(source_file)
-        
-        # get the parent folder name
-        parent_folder = os.path.basename(os.path.dirname(pdf_file))
-        
-        # move the converted file to the corresponding folder
-        target_folder = os.path.join(os.getcwd(), "PDFs", parent_folder)
-        
-        # if the folder does not exist, create it
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
-        
-        # move the converted files to the respective folders
-        pdf_file = move_file(pdf_file, target_folder)
-
-        # ----------------- Incrementing the value of the progress bar -----------------
+        markdown_to_pdf(source_file)
+        markdown_to_word_document(source_file)
+        # markdown_to_powerpoint(source_file)
 
         pBarCount += 1
         pBar.update(pBarCount)
 
     pBar.finish()
 
-
-def get_files(src_path: str, file_ext: str) -> list:
-
-    source_file_list = []
-
-    for root, dirs, files in os.walk(src_path):
-        for file in files:
-            if file.endswith(file_ext):
-                source_file_list.append(os.path.join(root, file))
-
-    return source_file_list
-
-
-def move_file(file_path: str, dest_folder: str):
-
-    if not os.path.exists(dest_folder):
-        os.mkdir(dest_folder)
-
-    if(os.path.exists(os.path.join(dest_folder, os.path.basename(file_path)))):
-        os.remove(os.path.join(dest_folder, os.path.basename(file_path)))
-    
-    sh.move(file_path, dest_folder)
-    
-    return os.path.join(dest_folder, os.path.basename(file_path))
 
 if __name__ == "__main__":
     update_all()

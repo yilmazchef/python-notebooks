@@ -1,7 +1,11 @@
+build
+dist
+.synced
 .idea
 venv
 */.env
-
+syndoc.spec
+.pyenv
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,virtualenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,virtualenv
