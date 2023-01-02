@@ -1,0 +1,26 @@
+[
+    {
+        "id": "1",
+        "date": "2016-01-01",
+        "amount": "100",
+        "description": "Salary"
+    },
+    {
+        "id": "2",
+        "date": "2016-01-02",
+        "amount": "-20",
+        "description": "Food"
+    },
+    {
+        "id": "3",
+        "date": "2016-01-03",
+        "amount": "-10",
+        "description": "Gas"
+    },
+    {
+        "id": "4",
+        "date": "2016-01-04",
+        "amount": "-20",
+        "description": "Food"
+    }
+]

@@ -1,0 +1,63 @@
+# ATM app 
+
+import time as t
+
+balance = 1000.00
+logs = dict()
+
+def check_pin(pincode):
+    pass
+
+
+def withdraw(amount):
+    pass
+
+
+def validate(are_you_sure):
+    pass
+
+
+
+# 4. Als de gebruiker validate bevestigt,
+#    geef dan het bedrag uit en geef een melding dat het geld is uitgegeven.
+
+def give_money(amount):
+    pass
+
+# 5. Als de gebruiker validate niet bevestigt,
+#    geef dan een foutmelding en vraag de gebruiker om het bedrag opnieuw in te voeren.
+
+def ask_to_try_again(amount):
+    pass
+
+
+def warn_to_try_again():
+    message = "Please enter a valid option to withdraw: 'y' for yes, 'n' for no."
+    print(message)
+    logs[t.time_ns, message]
+    
+def ask_to_confirm_withdrawal(amount):
+    message = "Please confirm that you would like to withdraw {0}: y/n".format(amount)
+    logs[t.time_ns, message]
+    return input(message)
+    
+def warn_that_withdraw_cancelled():
+    message = "Withdrawal request is cancelled."
+    logs[t.time_ns, message]
+    print(message)
+    
+def inform_withdraw_in_progress(amount):
+    message = "Withdrawal of {0} is in progress..".format(amount)
+    print(message)
+    logs[t.time_ns, message]
+
+def warn_cannot_withdraw_negative_amount():
+    message = "Please enter a POSITIVE value (an amount grater than zero)."
+    print(message)
+    logs[t.time_ns, message]
+    
+def warn_cannot_withdraw_more_than_balance():
+    message = "You can NOT withdraw more than {}.".format(balance) 
+    print(message)
+    logs[t.time_ns, message]
+

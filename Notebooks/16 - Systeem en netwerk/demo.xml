@@ -1,0 +1,26 @@
+<transactions>
+    <transaction>
+        <id>1</id>
+        <date>2016-01-01</date>
+        <amount>100</amount>
+        <description>Salary</description>
+    </transaction>
+    <transaction>
+        <id>2</id>
+        <date>2016-01-02</date>
+        <amount>-20</amount>
+        <description>Food</description>
+    </transaction>
+    <transaction>
+        <id>3</id>
+        <date>2016-01-03</date>
+        <amount>-10</amount>
+        <description>Gas</description>
+    </transaction>
+    <transaction>
+        <id>4</id>
+        <date>2016-01-04</date>
+        <amount>-20</amount>
+        <description>Food</description>
+    </transaction>
+</transactions>
